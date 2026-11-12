@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Céu de Pipas — Espanhol 5º ano</title>
+<style>
+:root{
+  --fundo:#eaf6ff; --papel:#fbfdff; --pipa:#ff8a3d; --pipa2:#c45f17; --sol:#ffc83d; --sol2:#c99400;
+  --rabiola:#ff5d8f; --rabiola2:#c93366; --linha-v:#24a36b; --linha-v2:#17774c; --anil:#3a8fd6; --anil2:#1f63a3;
+  --tinta:#26323d; --cinza:#6f7c88; --linha:#cfe3f3; --ok:#1f9d5b; --erro:#e0453a;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Trebuchet MS","Segoe UI",Verdana,sans-serif;background:var(--fundo);color:var(--tinta);font-size:18px;line-height:1.5}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+.topo{background:linear-gradient(180deg,#bfe3ff 0%,#e3f3ff 70%,#f6fbff 100%);text-align:center;padding:12px 10px 8px;border-bottom:4px dotted var(--anil)}
+.topo h1{margin:4px 0;font-size:1.8em;color:var(--anil2);letter-spacing:.5px}
+.topo p{margin:2px 0;color:#4d5d6b;font-size:.9em}
+.ceu{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:14px 6px 10px;background:linear-gradient(180deg,#f6fbff,#fff);border-bottom:3px dotted var(--linha)}
+.pipa{width:42px;display:flex;flex-direction:column;align-items:center;transition:transform .8s ease;filter:grayscale(1);opacity:.45}
+.pipa .losango{width:34px;height:34px;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);background:#dfe6ec;display:flex;align-items:center;justify-content:center;font-size:.95em}
+.pipa .rabo{width:2px;height:14px;background:#b8c4cf}
+.pipa small{font-size:.62em;color:var(--cinza)}
+.pipa.voando{filter:none;opacity:1;transform:translateY(-8px)}
+.pipa.voando .losango{background:var(--c)}
+.pipa.voando .rabo{background:var(--rabiola)}
+nav.abas{position:sticky;top:0;z-index:20;background:#fff;box-shadow:0 2px 8px #0001;display:flex;gap:6px;overflow-x:auto;padding:8px}
+nav.abas button{flex:0 0 auto;border:2px solid var(--linha);background:#fff;border-radius:14px;padding:8px 12px;font-weight:bold;color:var(--tinta);position:relative}
+nav.abas button.ativa{background:var(--anil);border-color:var(--anil2);color:#fff}
+nav.abas button.trancada{background:#eee;color:#999;border-color:#ddd}
+nav.abas button .selo{position:absolute;top:-8px;right:-6px;background:var(--sol);color:#5a3d00;border-radius:10px;font-size:.62em;padding:1px 6px}
+main{max-width:860px;margin:0 auto;padding:14px 12px 80px}
+section.aba{display:none}
+section.aba.ativa{display:block;animation:entra .35s ease}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:#fff;border-radius:18px;padding:16px 18px;margin:14px 0;box-shadow:0 3px 0 var(--linha),0 4px 14px #0000000d;border:2px solid var(--linha)}
+h2{color:var(--anil2);margin:.2em 0 .4em}
+h3{margin:.3em 0}
+.sub{color:var(--cinza);font-size:.88em}
+.btn{border:none;border-radius:14px;padding:10px 16px;font-weight:bold;color:#fff;background:var(--linha-v);box-shadow:0 3px 0 var(--linha-v2);margin:4px 2px}
+.btn:disabled{background:#c9c4cc;box-shadow:0 3px 0 #a9a3ad;cursor:not-allowed}
+.btn.fio{background:var(--anil);box-shadow:0 3px 0 var(--anil2)}
+.btn.faisca{background:var(--pipa);box-shadow:0 3px 0 var(--pipa2)}
+.btn.claro{background:#fff;color:var(--tinta);border:2px solid var(--linha);box-shadow:none}
+.trilha{display:grid;gap:10px}
+.etapa{display:flex;gap:12px;align-items:center;border-radius:16px;padding:12px 14px;border:2px solid var(--linha);background:#fff;text-align:left;width:100%;color:var(--tinta)}
+.etapa .ic{font-size:1.8em}
+.etapa.trancada{background:#f1f0f2;color:#8d8892;filter:grayscale(1)}
+.etapa.feita{border-color:var(--ok)}
+.etapa.nova{animation:brilho 1.4s ease 3;border-color:var(--sol)}
+@keyframes brilho{0%,100%{box-shadow:0 0 0 0 #ffc83d00}50%{box-shadow:0 0 0 8px #ffc83d88}}
+.tag{display:inline-block;border-radius:10px;padding:1px 8px;font-size:.75em;font-weight:bold;margin-left:4px}
+.tag.ok{background:#dff5e8;color:var(--ok)}
+.tag.novo{background:#fff1c2;color:#7a5600}
+.tag.lock{background:#e7e5ea;color:#6b6670}
+.barra{height:14px;background:#e3edf5;border-radius:10px;overflow:hidden;margin:6px 0}
+.barra>div{height:100%;background:linear-gradient(90deg,var(--anil),var(--pipa),var(--rabiola));width:0;transition:width .4s}
+.bloco{border-left:8px solid var(--c,var(--anil))}
+.bloco.fechado .corpo{display:none}
+.bloco .cab{display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
+.bloco.trancado{opacity:.55}
+.caixa{background:#fff8e3;border:2px dashed var(--sol);border-radius:12px;padding:8px 12px;margin:10px 0;font-size:.92em}
+.regra{background:#eef6ff;border:2px solid #cfe3fb;border-radius:12px;padding:8px 12px;margin:8px 0}
+.exemplo{background:#effaf3;border:2px solid #c7ecd6;border-radius:12px;padding:8px 12px;margin:8px 0}
+.alerta{background:#fff0f4;border:2px solid #ffc2d4;border-radius:12px;padding:8px 12px;margin:8px 0}
+.fala{background:#fff4ea;border-left:5px solid var(--pipa);border-radius:0 12px 12px 0;padding:6px 12px;margin:8px 0;font-style:italic}
+.balao{background:#fff;border:2px solid #d9e4ee;border-radius:16px;padding:8px 12px;margin:8px 0;display:flex;gap:8px;align-items:flex-start}
+.balao .quem{font-size:1.4em}
+.es{font-weight:bold;color:#1f4f86;white-space:normal}
+.som{border:none;background:#e3f0ff;border-radius:50%;width:30px;height:30px;font-size:.8em;margin-left:3px;vertical-align:middle;line-height:30px;padding:0}
+.som:hover{background:#cfe3fb}
+.quadro{width:100%;border-collapse:collapse;margin:8px 0;font-size:.95em}
+.quadro td,.quadro th{border:2px solid #d8e6f2;padding:6px 8px;vertical-align:top}
+.quadro th{background:#3a8fd6;color:#fff}
+.quadro td.lado{background:#e3f0ff;color:var(--anil2);font-weight:bold;text-align:center}
+.pergunta{margin:14px 0 6px;padding-top:10px;border-top:2px dotted var(--linha)}
+.opcoes{display:grid;gap:6px}
+.op{text-align:left;border:2px solid var(--linha);background:#fff;border-radius:12px;padding:8px 12px;color:var(--tinta)}
+.op:hover:not(:disabled){border-color:var(--anil)}
+.op.certa{background:#e3f7ea;border-color:var(--ok);font-weight:bold}
+.op.errada{background:#fde6e4;border-color:var(--erro)}
+.op.cinza{background:#f2f1f3;color:#777}
+.op.sel{background:#fff0dc;border-color:var(--pipa);font-weight:bold}
+.op:disabled{cursor:default}
+.fb{border-radius:12px;padding:8px 12px;margin-top:6px;font-size:.92em;animation:entra .3s}
+.fb.ok{background:#e3f7ea}
+.fb.no{background:#fff0e0}
+.estrelas{font-size:1.2em}
+img.bandeira{width:84px;height:56px;object-fit:cover;border-radius:4px;box-shadow:0 1px 4px #0003;vertical-align:middle;background:#eee}
+img.bandeira.p{width:60px;height:40px}
+img.bandeira.g{width:120px;height:80px}
+.galeria{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:8px 0}
+.galeria .item{background:#fff;border:2px solid var(--linha);border-radius:12px;padding:8px;text-align:center;font-size:.9em}
+.mapa{position:relative}
+.mapa .centro{background:var(--anil);color:#fff;text-align:center;border-radius:50px;padding:14px;font-weight:bold;font-size:1.15em;margin:6px auto 14px;max-width:520px;box-shadow:0 4px 0 var(--anil2);border:3px dashed #fff}
+.ramos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.ramo{border-radius:16px;padding:10px 12px;background:#fff;border:3px dashed var(--c);transition:filter .6s}
+.ramo h4{margin:0 0 6px;color:var(--c)}
+.mapa.incompleto .ramo{filter:saturate(.25)}
+.mapa.completo .ramo{animation:revela .8s ease}
+@keyframes revela{from{transform:scale(.96)}to{transform:none}}
+.no{margin:6px 0;font-size:.95em}
+.lacuna{display:inline-flex;gap:4px;vertical-align:middle;flex-wrap:wrap}
+.lacuna button{border:2px dashed var(--anil);background:#eef6ff;border-radius:10px;padding:2px 10px;font-weight:bold;color:var(--anil2)}
+.lacuna.feita span.enc{display:inline-block;background:#e3f7ea;border:2px solid var(--ok);border-radius:10px;padding:2px 10px;font-weight:bold;color:var(--ok)}
+.lacuna button.erro{border-color:var(--erro);background:#fde6e4;color:var(--erro);animation:balanca .45s}
+@keyframes balanca{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.contador{position:sticky;top:58px;z-index:5;background:var(--pipa);color:#fff;border-radius:14px;padding:8px 12px;text-align:center;font-weight:bold;margin:8px 0}
+.vf-frase{font-size:1.2em;font-weight:bold;text-align:center;margin:14px 0;min-height:3em}
+.vf-bts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.vf-bts .btn{font-size:1.1em;padding:12px 22px}
+.paises{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px}
+.pais{display:flex;gap:10px;align-items:center;background:#fff;border:2px solid var(--linha);border-radius:12px;padding:6px 8px;font-size:.92em}
+.pais .letra{font-weight:bold;color:var(--pipa2);min-width:1.2em}
+.comp{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.col{border-radius:14px;padding:10px;border:2px dashed var(--c);background:#fff}
+.col h4{margin:0 0 4px;color:var(--c);text-align:center}
+.col ul{margin:4px 0;padding-left:18px;font-size:.95em}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.palavra{background:#fff;border:2px solid var(--linha);border-radius:12px;padding:8px 10px;font-size:.92em}
+.palavra b{color:var(--anil2)}
+.postits{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.postit{background:#fff59a;padding:12px;border-radius:4px;box-shadow:2px 3px 6px #0002;transform:rotate(-1deg);font-size:.95em}
+.postit:nth-child(even){transform:rotate(1.2deg);background:#ffe0ec}
+.relampago button{width:100%;text-align:left}
+.resp-oculta{display:none;margin:4px 0 8px 10px;color:var(--linha-v2);font-weight:bold}
+.fundo-modal{position:fixed;inset:0;background:#26323dcc;display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.fundo-modal.aberto{display:flex}
+.modal{background:#fff;border-radius:20px;max-width:440px;width:100%;padding:20px;text-align:center;animation:entra .3s}
+.painel-salvar{font-size:.85em;color:var(--cinza)}
+input.codigo{font-size:1em;padding:8px 10px;border-radius:12px;border:2px solid var(--linha);width:170px;text-transform:uppercase}
+table.rel{width:100%;border-collapse:collapse;font-size:.88em}
+table.rel td,table.rel th{border-bottom:1px solid #eee;padding:5px;text-align:left;vertical-align:top}
+.gab-q{border-top:2px dotted var(--linha);padding-top:8px;margin-top:10px}
+.gab-op{border-radius:10px;padding:5px 10px;margin:4px 0;font-size:.92em}
+.gab-op.certa{background:#e3f7ea;border:2px solid var(--ok)}
+.gab-op.cinza{background:#f2f1f3;color:#666}
+.gab-op.marcada{outline:3px solid var(--anil)}
+.placar-final{text-align:center;font-size:1.3em}
+.trofeu{font-size:3em}
+footer{text-align:center;color:var(--cinza);font-size:.85em;padding:20px}
+@media (max-width:620px){body{font-size:16.5px}.topo h1{font-size:1.4em}.pipa{width:34px}.pipa .losango{width:28px;height:28px}}
+</style>
+</head>
+<body>
+<header class="topo">
+  <div style="font-size:2em">🪁☁️🗺️☁️🪁</div>
+  <h1>Céu de Pipas</h1>
+  <p><b>Espanhol · 5º ano</b> · Prova de 13/11</p>
+  <p>Unidad 8: <i>El mundo hispanohablante</i> — países, capitais, bandeiras e nacionalidades</p>
+</header>
+<div class="ceu" id="ceu" title="Cada pipa sobe e ganha cor quando você termina as perguntas dela na Leitura Guiada"></div>
+<nav class="abas" id="abas"></nav>
+<main>
+<!-- ============ INÍCIO ============ -->
+<section class="aba" id="sec-inicio">
+  <div class="card">
+    <h2>👋 ¡Hola, jovem aprendiz!</h2>
+    <p>Eu sou a <b>Rabi</b> 🪁, uma pipa que adora voar bem alto. Lá de cima eu enxergo o mapa inteiro da Unidade 8: os países onde se fala espanhol, as bandeiras e as capitais.</p>
+    <p>Neste kit temos <b>11 pipas</b> para soltar. Cada pipa que você termina sobe e ganha cor lá no céu! 🎯</p>
+    <p class="sub">🔊 Toque no alto-falante ao lado das palavras em espanhol para ouvir a pronúncia (funciona melhor no Chrome ou no Safari).</p>
+  </div>
+  <div class="card">
+    <h2>📋 O que vamos estudar</h2>
+    <p><b>Unidad 8 — <i>El mundo hispanohablante</i></b> (livro, p. 68 a 73)</p>
+    <ul>
+      <li>O mapa da abertura (p. 68 e 69): os 21 países, as bandeiras e as capitais</li>
+      <li><i>Más acción</i> (p. 70 e 71): reconhecer as bandeiras e escrever as capitais</li>
+      <li><i>Lengua en acción</i> (p. 72): a historieta da Frida e a tabela de masculino, feminino, singular e plural</li>
+      <li>Atividade 3 (p. 73): <i>la bandera cubana</i>, <i>el jugador cubano</i> e as outras frases</li>
+      <li>✍️ Escrever os nomes <b>do jeito certo</b> (com ñ, acentos e letra maiúscula)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2>🛤️ Sua trilha</h2>
+    <p class="sub">Os materiais abrem um por vez, na ordem. Conclua um para destravar o próximo.</p>
+    <div class="trilha" id="trilhaCards"></div>
+  </div>
+  <div class="card">
+    <h2>🧭 Como usar</h2>
+    <ol>
+      <li>Os materiais abrem <b>um por vez, na ordem</b>. Conclua um para destravar o próximo.</li>
+      <li>Leia cada pipa com calma e <b>ouça</b> as palavras em espanhol antes de responder.</li>
+      <li>Errou? Tudo bem! Leia a explicação e siga voando. Errar aqui é treino.</li>
+      <li>Depois de terminar tudo, os materiais ficam abertos para revisar quantas vezes quiser.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h2>💾 Seu progresso</h2>
+    <p class="painel-salvar" id="painelSalvar">Seu progresso é salvo sozinho neste aparelho.</p>
+    <button class="btn claro" id="btExportar">📥 Exportar</button>
+    <button class="btn claro" id="btImportar">📤 Importar</button>
+    <button class="btn claro" id="btZerar">🗑️ Zerar tudo</button>
+    <input type="file" id="arqImportar" accept=".json,application/json" style="display:none">
+  </div>
+  <div class="card">
+    <h2>📊 Relatório para os pais</h2>
+    <p class="sub">👨‍👩‍👧 Dica para os pais: o progresso fica salvo no navegador deste aparelho. Trocou de aparelho? Use 📥 Exportar / 📤 Importar ou o código da família para liberar a trilha.</p>
+    <p>Digite o código do Simulado (SIM-…) ou o código da família:</p>
+    <input class="codigo" id="codPais" placeholder="Código" autocomplete="off">
+    <button class="btn fio" id="btRelatorio">Abrir</button>
+    <div id="areaPais"></div>
+  </div>
+</section>
+
+<!-- ============ LEITURA ============ -->
+<section class="aba" id="sec-leitura">
+  <div class="card">
+    <h2>📖 Leitura Guiada</h2>
+    <p>Cada pipa tem uma explicação curtinha e <b>3 perguntas</b>. A pipa seguinte abre quando você responder as 3 da anterior.</p>
+    <div class="barra"><div id="barraLeitura"></div></div>
+    <p class="sub" id="txtLeitura"></p>
+  </div>
+  <div id="blocosLeitura"></div>
+  <div class="card" id="fimLeitura">
+    <h2>🚨 Pegadinhas para não cair na prova</h2>
+    <ol>
+      <li>É <b>Ciudad</b> (C-I-U), não "Cuidad".</li>
+      <li>É <b>España</b>, com ñ e terminando em <b>a</b>. Não é "Españo".</li>
+      <li><b>México</b> começa com M maiúsculo e tem <b>x</b>.</li>
+      <li><b>El Salvador</b> é o país; <b>San Salvador</b> é a capital. Os dois com S maiúsculo.</li>
+      <li><b>Bolivia</b>, em espanhol, não tem acento. <b>Perú</b> e <b>Panamá</b> têm.</li>
+      <li><b>Venezuela</b> se escreve com z: ve-ne-zue-la.</li>
+      <li><b>Guinea Ecuatorial</b>: e-cua-to-rial (não esqueça o a).</li>
+      <li>Não deixe bandeira em branco: a do <b>Paraguay</b> também cai!</li>
+      <li><b>La bandera</b> é feminina (cubana, boliviana, uruguaya, peruana). <b>El jugador, el equipo, el escritor, el plato</b> são masculinos (cubano, boliviano, uruguayo, peruano).</li>
+      <li><b>Ellos</b> son españoles · <b>Ellas</b> son españolas · <b>Nosotras</b> somos españolas.</li>
+    </ol>
+    <h3>🗂️ De onde veio cada pipa</h3>
+    <table class="quadro">
+      <tr><th>Tópico do livro</th><th>Pipa</th></tr>
+      <tr><td>Mapa da abertura (p. 68 e 69)</td><td>1</td></tr>
+      <tr><td>Capitais (mapa p. 68–69 e atividade 2, p. 71)</td><td>2, 3, 4 e 5</td></tr>
+      <tr><td>Bandeiras (p. 70, 71 e 73)</td><td>6</td></tr>
+      <tr><td>Grafia dos nomes (lista da p. 70)</td><td>7</td></tr>
+      <tr><td>Historieta da Frida (p. 72)</td><td>8</td></tr>
+      <tr><td>Tabela masculino/feminino e atividade 2 (p. 72)</td><td>9</td></tr>
+      <tr><td>Atividade 3 (p. 73)</td><td>10</td></tr>
+      <tr><td>Revisão geral</td><td>11</td></tr>
+    </table>
+    <div style="text-align:center"><button class="btn faisca" data-proximo="mapa">🧠 Ir para o Mapa Mental</button></div>
+  </div>
+</section>
+
+<!-- ============ MAPA MENTAL ============ -->
+<section class="aba" id="sec-mapa">
+  <div class="card">
+    <h2>🧠 Mapa Mental para encaixar</h2>
+    <p>O mapa tem algumas <b>peças faltando</b>. Em cada uma, clique na palavra certa. Acertou? Ela fica verde e entra no mapa. Errou? Tente de novo! 😉</p>
+  </div>
+  <div class="contador" id="contadorMapa">🧩 Mapa: 0 peças encaixadas</div>
+  <div class="mapa incompleto" id="mapa">
+    <div class="centro">🪁 <i>El mundo hispanohablante</i> — Unidad 8</div>
+    <div class="ramos" id="ramosMapa"></div>
+  </div>
+  <div class="card" id="mapaFim" style="display:none;text-align:center">
+    <div class="trofeu">🧠</div>
+    <h2>Mapa completo!</h2>
+    <p>Foi você quem montou! Agora vamos testar no jogo de Verdadeiro ou Falso.</p>
+    <button class="btn faisca" data-proximo="vf">✅ Ir para o Verdadeiro ou Falso</button>
+  </div>
+</section>
+
+<!-- ============ VERDADEIRO OU FALSO ============ -->
+<section class="aba" id="sec-vf">
+  <div class="card" id="vfJogo"></div>
+</section>
+
+<!-- ============ RESUMO ============ -->
+<section class="aba" id="sec-resumo">
+  <div class="card">
+    <h2>🗺️ Resumo Final</h2>
+    <p>Tudo o que cai na prova, num lugar só. Toque no 🔊 para ouvir.</p>
+  </div>
+  <div class="card">
+    <h2>🌎 Os 21 países e as capitais</h2>
+    <p class="sub">Na mesma ordem da atividade 2 da p. 71 (repare que a lista usa a letra <b>ñ</b> depois do n!).</p>
+    <div class="paises" id="gradePaises"></div>
+  </div>
+  <div class="card">
+    <h2>🧠 Truques para decorar as capitais</h2>
+    <div class="comp" id="truques"></div>
+  </div>
+  <div class="card">
+    <h2>🏳️ As bandeiras da p. 73</h2>
+    <div id="bandeirasResumo"></div>
+  </div>
+  <div class="card">
+    <h2>🗣️ Masculino, feminino, singular e plural (p. 72)</h2>
+    <div id="tabelaResumo"></div>
+  </div>
+  <div class="card">
+    <h2>🚨 Dicas de prova: escreva certinho!</h2>
+    <div class="postits" id="postits"></div>
+  </div>
+  <div class="card">
+    <h2>📚 Palavras importantes</h2>
+    <div class="grade" id="gradePalavras"></div>
+  </div>
+  <div class="card relampago">
+    <h2>⚡ Mini-quiz relâmpago</h2>
+    <p class="sub">Clique na pergunta para ver a resposta.</p>
+    <div id="relampago"></div>
+  </div>
+  <div class="card" style="text-align:center" id="fimResumo">
+    <button class="btn" id="btLiResumo" disabled>✅ Li o resumo até o fim</button>
+    <p class="sub" id="txtLiResumo">O botão acende quando você chegar ao fim da página.</p>
+    <button class="btn faisca" data-proximo="simulado">📝 Pronto para o Simulado!</button>
+  </div>
+</section>
+
+<!-- ============ SIMULADO ============ -->
+<section class="aba" id="sec-simulado">
+  <div class="card">
+    <h2>📝 Simulado</h2>
+    <p>25 questões, como numa prova de verdade. Responda todas e clique em <b>Enviar</b>. Depois aparece o gabarito comentado, com áudio.</p>
+    <div class="barra"><div id="barraSim"></div></div>
+    <p class="sub" id="txtSim"></p>
+  </div>
+  <div id="questoesSim"></div>
+  <div class="card" style="text-align:center" id="envioSim">
+    <button class="btn faisca" id="btEnviarSim">📨 Enviar Simulado</button>
+  </div>
+  <div id="resultadoSim"></div>
+</section>
+</main>
+<footer>🪁 Céu de Pipas · Espanhol 5º ano · Conteúdo do livro, Unidade 8 (p. 68 a 73) · Bons estudos, jovem aprendiz!</footer>
+<div class="fundo-modal" id="fundoModal"><div class="modal" id="modal"></div></div>
+<script>
+// ===================== DADOS (fonte: livro de Espanhol 5º ano, Unidad 8 "El mundo hispanohablante", p. 68 a 73 — fotos enviadas) =====================
+// Bandeiras: recortes das fotos das p. 70 e 71 do próprio livro.
+const FLAGS = {"argentina": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAwEBAQEAAAAAAAAAAAAAAAECBQQGA//EADMQAAIBAwEFBQUJAQAAAAAAAAABEQIDITEEEkFRkQUVYXGBEyMyM5IUIkNSU3KhosGC/8QAGAEBAQEBAQAAAAAAAAAAAAAAAAEDBAL/xAAaEQEAAwEBAQAAAAAAAAAAAAAAAQITElER/9oADAMBAAIRAxEAPwDg3knwcinMA194PJndEQ45XohT/IcBcuZUUnCEvMTngACZUiq9PIOgCjHmGYwDwoQAGjwxr4nLEkx53sFD48gS9BeQaKORAYAN9APoHl8g4m2tg2aflIa2LZp+TSZaw1ylhyDanh6m59j2afk0j+ybM/waOg1gylhNpZD1RvPZNnS+TR0G9l2ePk0dBtBlLAnxQOEuBrXatltuFZtt6ZQrd7ZnFNVi2oxKRN6rjZlOpNZaE4jU9B7CzuyrduOe6NWbUYt0fSXWEyl52lpNyy5xhm/7O2p93T9KKVulJxRT0JtBlLzs58Bb0s9G6ad34aV6Bu05wug1XKXnM8v4A9E6c6LoB51MlzkFqHEOJk3HME8sQBBx8CNoqdFip06wWK7Srluql8USVh5u63dvVb01U05aTiRL3dyiulV0UVuN1uZ8T77Rstym9NGKtM8Qs7JXXdTrmqqnRcEcfNunV9ry19ibdiKsRofenRE27fs7dNPFa+ZSk7Icp/6PkJOQmXHAqDiC5CBPLAcgKPACDPq7VS/Az+4F2qnn2P8AYznnKEtNDqzq5tLNLvVziz/YH2q/0V1M0U5LnU0s0e9X+in/ANB3pU1HsaerM5PIRyGdTSzvfadVUTZofLI32lVSpVqhepwN4XFg8qBlXw0t67+9LmPd0dWTV2pc3sW6P5OF45CQzr4d29d/el2J3LaCntO9PwUdDiBPDYzr4d29dj7Tv/lo6E95X3iKJ/acecuBJaoZ18O59d3eO0c7f0gcYHjiHrqVuYgWB8xGzIPGeBOvIrgfNPIDH4EzKbKT+8A3r4oXDkwek8Rv/AJbwCcRjUT0EgK0H64JfET08gquDSBPUSQ9HARO8AoAzafH/9k=", "bolivia": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAwEBAQEAAAAAAAAAAAAAAAEFAgMGBP/EADMQAAIBAgMFBQcEAwAAAAAAAAABAgMRBCFBBRUxUZESE1JhkhQiQlNxgaEyQ4KxcqLB/8QAGQEBAQADAQAAAAAAAAAAAAAAAAECBAUD/8QAIBEBAAEEAwEAAwAAAAAAAAAAAAECAxMUERJRBCExYf/aAAwDAQACEQMRAD8AjGvuIFqaLtG8/Izncd7IS0CSHwHHIAA0xBrmGgBLLQV2O5kJw1d3ybBTl4n1MhpmDiGu3Pxy6sO9qWyqT6mQQTrDr7RW+bPqwOVwInWHR0qqSvSn6WLsSSd4y6HpMzS4M0N3+McjzDWSumjKdmepaTWaXQ5diF7dmL+xlH2x4ZHmx3R6N0qWsIelC7ijrSh6UXcjwyQ89kncNCvjqmEwqh26dNOUknePBczjWrbPpV6VO1OXeO75rke1N/mOeJTNSnCaL3sWGaT7qNnyE8Bhn+10bPPboZZIQbAle5dezsN4H6mZ3bhvDJfyG3QuSES+Q/7LD2Zh7/Hb/IN24e/x+ou1bMkI32As7soc6nUBtW07w+8FyB8Qjqcl4noYXFm28jK4lJDM1W40pyXGKbNcTNWLlSnGPFxaRlRx2jlEqUnjace9/S27RXBK2dzjglhoVFUhFvsOz1b8zEpKOG7uopRlGT4LjczCnGlUi6nuwaySO7REdOGvd7RXxwr4bEznialCovejd3XA+u5MwUnW2jOql7vZs2U/7ONfiIr/AA2ZjgMUeIzOrPEPiDBMACwAAECO08Xa/e3vzijS2ri18cfSfCnlzBZ3ud/Bb8cvLX6+/e+K17D/AIgtsYjw0+hPDO+epNa14Zq/VJbYr+Cnce+Kvyofkmr8h5Imta8XNX6pb2lfOhTedw3nHXDQf1d9SbxGy4KFzV+qi2wottUEm+Ug3ytaP+xJaGvoYT8tuf3C561dbZje3cy9SDfFNPOjPqiOskxcLImna8Nita3xS+VPqh74pfKn+CJfNDXJomnbWPorW970fl1PwBFyAmnbNisLhyCNgvZ28wTN1rm7GUDd2K+YD8+Q/N6iuaWgA10DOwhsBNWE/M0xMBA85BqC/wCgCvf6DWhng2aX6kQFgEAV/9k=", "chile": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAAECBQYEA//EADMQAAIABAUBBAkEAwAAAAAAAAABAgMEEQUSITFBUQZUkZITFCNCYWJxcrEiJDShRIHB/8QAGQEBAAMBAQAAAAAAAAAAAAAAAAECBAMF/8QAIBEBAQABAwUBAQAAAAAAAAAAAAECERRREhMhMWEDBP/aAAwDAQACEQMRAD8AohD2J08qKdUS5aT/AFxJHoW6M7zEdeJUjoq2OUk8id4X8DkHixPptsHizYVTP5bHbcrMAebCZPwuv7LNGC+3aJEkJbDh/sgS2HwJ7gnoA91qCFuSWiAdrnlUr9vMtbY9UyE7WTM+0rZ4TFblvqBNRKyAx9MdNaw62ND2crJkyY6aOFRKGHNDFbVGfejZ6yqmbIhmKVFk9IrRNb26HuZ49U0jJPDUY1UunoXNlQQRRRPLnaTymQbbd3q+p7QVM2GnjkZry4/dfD6o8baD88emaVNurV9m4r4ZbpHEi3XUpOy7vRTYekf/AAvEY8vddYknoSW5Gw1vYqJW1GC3YACHwA2AJEY9YIvoyV9Bb3FIq09Ft4AQ9JbToBkdGRjgiUcSy6JkckVtjonL20f3MgaZ/Zlw0bPHl4uGLoLLF0Z77MTJ3mXBsseVv2eq5NLKnQ1ExQNxJq/OhdQ4pRd5gMcBxv7W3XRbazlslidF3mX4k4cSor/ypfiYtKyYIju02s5bdYjRv/JleYar6PvMrzGJuugcbId2m1nLcKupO8yvMh+u0veZXmRhrLoPjjwJ73w2s5bj1yl7xK86BVlL3mV5kYZ2vsgaXKXgO78RtZy00bluOJqKFq/UCplTPZQa+6gOfV8V7LjqoctTNXzM8mjorlasm/U5yrbj6IXNiQuQkWESFyA+LCsH0BAMYCYSYyK3GEBgwYmBJTGkl0AgBDn0uvEVatmf6OU78ZSWIxW6L8FfyWs0q2F1xhgJsRCx31QfkBcgMFuF/wAhywGAIYSBD2dhcgPkHuHIPcBWQAAQ/9k=", "colombia": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgABAQEAAwEAAAAAAAAAAAAAAQACAwQFBv/EADEQAAIBAgMGBAQHAQAAAAAAAAABEQIhAzFBBAUSUWGRE3GBkiJSU6EUFSMyQkOC4f/EABoBAQEBAAMBAAAAAAAAAAAAAAEAAgMEBQb/xAAiEQEAAQMDBQEBAAAAAAAAAAAAAQIUUQMFEQQSE1JhQRX/2gAMAwEAAhEDEQA/AHi1Y8TaMvoSdz5zyVZd/iC3ZmW3xO4vOwMO6rK4gO6iQbKYqhakh5lHkxqyMxcXcCzVnAvQnmWhAK0INRV2ApaFFrEDyJKSMz0IQ7DzIzq2ab6nG0M2XMnmgyEB5yTd5RPkDzFF5oXnBmbi3fzIoHoLsl5A7tEFqZF3hgxR0YNWQ8vMCQmkieZCHLKTu13B1ULOuleqPks3diup68bTPs6t18fVPGwpviUe5BVtGCk5xsP3I+UWVybUGv5MftQuvj6f8Xs6zx8P3Gatu2ZR+vR3PmQ1g1G1U+wupw+me8dkV3jU9mZq3nsi/sftZ86sosTNRtenmRc1YfQVb12X5qn/AJMVb32VZLEfoeEsuRluHc1G2aWZFzW9x75wPp4kGHvrD+jX6tHjJ3zsVl/01G3aMZFxXL13vpRKwNPmCrfNWmDT61Hk6DLjqbjoNCPweet6f5zifSw+7I8yVyIbHQ9R5q8taIdEciwUleo1ThUu3Ezm89GW7XUw66t0Jq71Od4KupqHwqY1cdSuKFaamHWahdSzcs7HhUK7mfMPDpSTh9wuaDaajgmBaUnP4eHH7beZcFKamlWM3NDVnW4FyMt3k7LopSXw0i6aflXYrqnBs68upb7FqdtUprJdgqXC8kF1GDHRVZdafMYeqO1GthTbTuF1GGo6L66UPl9iOzxdWQXXxWX1yWa6G6bZamNBR03om7sDyKbMP5EA3dSNTl25FPxepVOF5kknaCqV7lAsCw51ROw6MNSHJfMKs0wTlMpJctaLqSUJ6M1SuJqdWc+HgU1Z1VfYRy6kIj0lsOFCvX3REO5//9k=", "costarica": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAAECBQYEA//EADsQAAECBAIFBwoGAwAAAAAAAAEAEQIDBCEFMQYWQVGSMjRhcYGCkRITFBUjRFJTVGIzQnKhorEkk9H/xAAYAQEBAQEBAAAAAAAAAAAAAAAAAQQDAv/EAB8RAAICAgMBAQEAAAAAAAAAAAABAhIREwMUUSEEMf/aAAwDAQACEQMRAD8AxZJYf9UhtfarUaN4gRlKHfXpDo1XNypA761Wic/pSZskRfoV7qxWv+JIHeKY0Xq9s+T4lLRJhlDl/acII3K9GjFUBziT4FSh0Yn7aqVl8JUtEuGZ8kXQz9Sv9V5jOaqDgKkdGI2D1Yv9iXiMMz2y5UWL5rSaru3+Xn9ieq8ABeritugCXQwzNbUAMOtacaMSmc1Uw90J6sU73qJvgEuhVmWCkBuWpGjFKwefO/ZOHRmjDe1nF+kKbEKsynYhavVyiflT/EIV2IVZoh/aY5N1ljj9YflDuIGPVsX5pYH6FkujX15mpPK6Emz6Vlzjddsjgz+BdNLXYhUwxzIp8MqRByozAPADaUU0yS4ZRWWXvRtSNj0MqmOdVTpccVFXedigDmEyxCT1KpjxeuJLzyO6AjmkI8Ln9izVRWB3JnMBZE4rXEE+kR+AUTidb9TMU2I9daRrruEyHJssfFiNYfeZnilFiFWYr1MzsiTYi9aRr4QX6EMXNiscayp+om8RUTV1BznzD3ipsRetL02lyLAoazMSsV6VPMX40zjKQqJxF5sziKbEOs/TbP0FCxPnpnzY/EoTYh1n6LIlgmCzIDBC5M3EojZwrOpMqCnp5BmCGCXL8uPyTcxG91VQxEdS76mkM+kl1kv2kMI8mZCM4Tv6l6h/TJ+rNPgSKiRIqpccmNo4YhYxWIN15YtBBBiE7zZBgiIiDZMbooqP02pEUmVDJggvFHsh6V41kyGZVzIpbmWGhhfcAy9cjOf40/uTwazI60b0yDvXM3BtCiWdwmzMNyN6ARzzdLsDJ7S4siJnFnQA9mT2bUiNqBmgB0J9gQgLj1BWmxMriT1fq/ik8RWozISOS760YOzMy4wCq2zJQ7SumjwuvpJhilT5ML2ILkHsV2h7ooIj55NYZV1FFiM+UZZn08qWeVDLhIfrXDFo9Pce3lNlkVpDyWUCXF0cERc0or4Z46PTQL1EDfpKY0emHOpg4Cr/AGvsCbf2lEXsTM+dHo/qYeApavHbVDgWgjOxQa/QmtE3zKMaPgHnJv8AYpavg51Jv9iubtvTDsN6a0N8/Sl1fgdjUxcATGj8sC9THwhXRBOxBTWhvn6Uur0r58fCEK7brQlETfP0yOseJOfaQf6wg6QYib+eh7IAql1IloQttI+GbJYRY9iJ94/gEosdxEDnP8Qq3cgpReEyyw9e4k3Ojb7QkcbxE51UfgFXvcoz8EqvBllgMYxE+9zP2SOLYi3Opjv0LiHJT2jqUqi5Or1tiBZ6qb4qJxWui97neK5DuSIYq1QydPrKtJc1c7iTGI1ufpU7iXIbGyQNmSqGTr9YVr87nX+5I19ZF7zOb9a5zk6PynqSqGTo9Nq/qp3GhcwyQlUTJ//Z", "cuba": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAQQAAgMFBv/EADoQAAEDAgMFBQMLBQEAAAAAAAEAAgMEEQUhMRIVQVGSFFRhcZETIiQjMjRDRFNicoGCoTNCUrHB0f/EABkBAQADAQEAAAAAAAAAAAAAAAABAgMFBP/EAB4RAAMBAAIDAQEAAAAAAAAAAAABEQIDEgQhMSJx/9oADAMBAAIRAxEAPwDyz2h99rU53Sz2Fg8OaZvlko7MWIUcfM8ffh0Obx87VX0UuCVFuKZz3hsdszoTZNbixLhTix/GF7s7y1Uzl749YcaOaclAuluPEQfo9/3BDceI69mPUFPZFIznFTzXQOC4j3V3qENzYhxpX3HiE7ImMQ11QOmSeOEYh3WT+FN0Yhl8JInZCCNrHREafqnd04hY/CyIbpr+6S+idkRGJC18kbeCbGF19/ok3ojuyu7pL0p2QjFLKJvdlf3SX0UUVExgGbUb5oX93VG65Z3yAnyXUw3F30xEc13xfyElUUr6eOBz/rmbQHJLm4PkpThnrC5F7PcRSxzRh8Tg5p5LQaLxtHXTUcgdG47J1bwK9FFjVG+NrpJRE46tIW2dU8HLxPH8OgUSMr80hvfDzb4pn8qxxagP2uPJXjMKN20KGlkqMUoSLdqi9VN40Vr9ri6lEYG7CxQIS+8aI/aoupHeFH3qHqSMG/C6OgB4FLitpCLdqh6gj2yl4VEWf4wkYNbFRZdupu8w9YUSMHjMiOS7GH4TS1sQe2ok2h85thdcYLr4AWRVEtRK8MjiZmSeJWGfvs6vNVmo7WJYfHWxRxl5jEehFsl5Wtigjm9nTzOmDdXEWF/BehfiEGJU1RDHtMeWENDsi4Lyw0H+lOoZ+OtR0JtohbwuEc7rWOlqpow+GmkkbzAyVc2+jXbSX6E5Y9j3hayzTb8Nr9q7qWYn8qqcOre6zW/Kujhxe2cbkj1coWBsbIcM+aYNDVg50s3QVOxVPdpugrSopGL8bIgeC1NJUjWnl6SoaeoFrwS9JSoGJ4o8fJXMEv3UnSVX2UuXycnSUqALDwUV/ZS/dv6SoqeiwxoeaJLtm2dr6XyQ0AIRIuAuYd4AJa7aaSLaFBoLngNBc4nIDUlXY0PkDC9jL6uebAL0VAMLogC2qhdKfnSF2f6cldZbMOTmzgxw7AwNmWtzOoiH/V3QA0WAAAGQHAJbt1JtZVUNvzK3bqTvMOeXzwtVmHg3yPb9s2vmEXZt8lgaumJ+kRZfjCt2mAjKaPqCsUNHHIIi/wCioZYnNylj6goJGZfKN6goBY3ItdE8OSqHsP8AezqCIINhceqAGtjwVkOGVteatZAVJN9FFM+aiqDwvlwWcktvdZqOKrO87WzwVFbi4Vr9M9XkeQ8vpkqczfP/ANU4Ik20VQvbDnttuslvAKZHRF2gVbAoQHLVE3sqqwSIB2tLIEm494380L5o8kiAQT/kfVESPAHvut5qugU0NkiBdsst7CR4/crdolH1rz+4rIKN1ASIGwmmt/Vf1FRUAyCiy6lz/9k=", "ecuador": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAAECBAUDBv/EADYQAAEDAwIDBgMFCQAAAAAAAAEAAhEDIUEEMQUSURNhcYGRoRQVIiMyQkPBM1JTkqKx0eHw/8QAGgEBAAMBAQEAAAAAAAAAAAAAAAEDBAIFBv/EACQRAAICAQQBBAMAAAAAAAAAAAABAhEDEhQhURUEEzFhBSJS/9oADAMBAAIRAxEAPwDhmUJZTyvnT0AbYp7+KBaYRsUA5lLESj9E8X8VAAC8qSQ63UoiO9AEf6Qd0ZKQnlQBnxTn2Sylub4QihyS5Kb7pzO26QseiWxRJCJCEtknFMJdeqBgqQPEICJlA3QDi6p63X/CAhtCrVPUC3qrn+FXq6lrHU3Bw7MzzDNlbiScuVZzJ8FXh/GaepeWVKbmPAtFwSlrOPUNPUFJjHPIs7EFV+Itp6pjKulpObXJk1BaAP1U9FoNNTYa9aa1UH6i/wDvC2+1iS1tFOp/Fl7RcV02sPI3mY84cN/NXpgqvRqgvJaGNpNaHCBErvhYcqSl+qouj8AgERJRhB2gKo6FAB80ZTI6JH7w90A+ZCP+2QgKnxNCSe2ZHipCtSt9qz+ZeaJtYpSTle74pf0YN39HqBUpk2qNjxUg5p/ED4FeWn1TBIG8Lh/iupE7z6PU2JtBss3iFEClVewQedo8VkB5H4j6rRY4/KHEyftQmyeBpt2dRzrJao76OlRfRHPrGte0SGE56Jaijy06hFVjucEcocN+5V+dkMHZtJG5Iymw0i6eyaC28gLQ3x8FNPXR20FNtTT0C4G1QtN1ruk371hNe9nCGuaS1xrG4XD43UAftX+qyS9FPNzF8F/vrHwz0kXFrIjeF5wazUj856m3X6obVnSuPF5e0N3A9BmNoUSeiwhxDVD80nyCY4jqf4k52UeMy/RO6gb3khYHzLV/vf0oUeMzDdQM4wgRIU+zFrpmnf73sve96HZlfpMvRA7Ix4KfZEz9QSFIwbhSssOznbZeiOVpaGrSdpaunquDQ4yJss/sz1HqmGOBEKrLoyRqzrHjyQd6S4+nDnEQWNAnlMgeaOydUDKTHNph4mXWkLlTq1WUjS2pkyR1UX1Kr6VOmQC2nt1WVQlqq+DU21HVp5LfEXU6WlpaWk4O5TJIKz8AYSDHTcG+U+U9D6LbhiscasxZFKTuhtmI2Cc5wkQ6ACD6IAdsAfRXWirTLocyAcqOSpCcyLqOztiptBp9Dv3oSg9UJaIpkuiPdB2CF4h9SOwAwmEhdA3CgDRNkIQDkhxhHcgWv3pnfyUgceyMpBPvQikNpMJjeZSGwTGEtjSgyN0dUHCMqbYcV0Ll7j6oUkJbOdMej//Z", "elsalvador": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAAECBAYDBf/EADoQAAEDAgMFBQQHCQAAAAAAAAEAAhEDIQQxQQUSUXGBBhMiYZEUFYKSFkJDRFOhsSQyMzRSVGKi8P/EABkBAQEBAQEBAAAAAAAAAAAAAAABAgQDBf/EAB8RAQACAwEAAgMAAAAAAAAAAAABEwISUREUQSExYf/aAAwDAQACEQMRAD8AyMzdAEg8Uh5p6r6bkI5ykOSkeCQtmgBmnJnqiP0SBg5q+BlQkzKl5JEXU8gBcYFyEb7hk458VH6qlryTWOHspGo8Cz3DqpCvVAMVHDquRHh5JAn1U1ji+y7txNYG1V/qpe1V9Kz/AFXECyjdTTHhtPVj3hivx3+qFWJEoUrx4u09WPZ64zo1fkKXd1NadTq0rcyTrElMfV4leN88elbBlrhPhcOhURot9Ag8AotYwi7G+it/8SphJF7hQJEZrfGhSNjSpm39IXM4WgRehSPwBPkRwrlhpQVsThMM/ePs9EQJI3RKiMBhKlOm84WiQ8TG7BunyY4tUseBHVAHFa87LwDxIw7OV1E7GwM/y8fEVq/FmuWSOV0iPCtYdhYDLu3Dk8rmdgYKLd6NbPVvxSvJmhcBLRaYdn8K6YqVgD5hDuztA5V6o9FbsSvJmN0IWl+jdD+4q+gQpdgleT2gbJ6fmlBBMtKAM7FcbpGnNAMJTItaEm35oJzcFVdpVzh8M+qIlgJEmFYFlyxFMVaVQGbgjpqs5fpYeDg67y17w/8AeYWm8lxBvI85/JSr13HC0nF4IpgvLGugsgZKjVoswlTu8U1zQ47rKljvDj5KJZTqudSod5VqCzg0aHXon379J7+PGh2diXYmkys4Q54h3Maq/nEKls/D+zYdlIEHcEFwESSruQTEk5lICARpkjK6ei0EwxyCnNiuRsAuobAKA6ISj/JCDEDG4kXGIqj4yujdo4xv3mr8yq/ohfQ1x45fZXBtXHD7y/qpN2zjh9uTzAVHkUgppjw2l6Q23jreNp+EKQ29jRrTPNi8vJKRMqV48XaXpu21XeTv0KDweLVJm2iwktwdAEm5bYryjlZLRSrDhvk95vaB1v2VtuD1MdoWxfDOz0es/k1GWSlOK75NEO0VEtE0Kg6hTHaDCEXZVHQLMuEAO9VEGSlOJZLV+/cE6JNQcZarDdt4B32pHwFY8CTKm1SjFbJbD3xgPx/9ShZGfIoSjEtlFokIOS9qrsnDsNnVPmVZ+ApAO8VT1XpszOLzR/wSIubKzUwzWZOd1hV3CJutep4V8ikOHEo3jKiCZKIkRa90G45Ik7oPmm05oFlmg6wg3lGqoTv4ZlJo8Kb8kNuCiJtHqpgXlIZBSKCMnihCEH//2Q==", "espana": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAQUBAAAAAAAAAAAAAAAAAwABAgQFBv/EADcQAAEDAgQDBQUGBwAAAAAAAAEAAgMRIQQFMUESE5FRYXGBkhQVIjIzI0JSU4KiJENiY6Gx0f/EABkBAAMBAQEAAAAAAAAAAAAAAAABAgMFBP/EACERAAICAQUBAQEBAAAAAAAAAAABAhEDBBIhQVEUEzFh/9oADAMBAAIRAxEAPwDH50xuZX+pLny0+o/1FDB0UqLzcnW2rwMJ5RT7V/UqXtE16yP9RQdRqlbvSDavA3PloPtH+pOZZKV43X70IaU2opoHtXhISvrd7uqK2R/43dUClSiBFhSLAcSPmJU2k9pQmIgN90rKosDQlEB+HRDZWiIDRSMIzZF2QRp2IzLjcnuSsZuQTUw8Yr90f6SWawyhjRy32HYki0ePYc2Mqr/O/apDKrfWr+lXwURvZ3rmPVZF2bWzMOVUFRP0anblX9+v6VpHTWyTaUPcEfVk9C2Z7crBtzv2ogyobznyandmDWkioBFyKElPHjg1rWv1pexW2/O1ZO8b3UBfnONf6UVmVMIFZndArcbxJE14FnCqIyxA2WD1OVcWVuK0eVRfmv6BGblcOpdJ1VpmvkiBL6cnoWwMeXYcfjPi5HGBw35VfElTj0uieal5ZvsVsZmHhbpEzojsaALADyUBdEaVDnJ9kslTxSTpI3P0ijlK2r2IgNkPVTbpVJmpM6UCDwTnENLHUiHzBGOipvZzJ5Q1kkjrW4qNattNDfKmTPhFPFS8yd/DG1pBoXDdWIIY2wwyuLnmSh4A0UVSVpilkDKG+90bCYnlwiOUOe3ahoWn/i62KMWuTKb8NjEQymSLkv4Q0VLa0RRXioqTnNxf8QICQQQaPoRTcK1FTksILjbV2p8VztVCMUnEuDf8ZYj70YXQWIzexeI0Jxm6KLoTbaorTUJiJNoSiNUAptKQmTSTJIJOWrQ+am1Yz8ynD3D4LE/dTtzOfsZ0XslpMl8GiTNk2QXumbKDEBQi57Vn+8pjszomZmU24Z0V4sGTG7oUoOSot4jCPdOXNLSHXIOyicvkNCwgHv3QPec+wZ0U2ZnPUWZfuWsVmXQbGaUcU2HhYyFw34irJqaE6kf5WR7ynFR8HRMcxxHDZzfSs54cs4qLSBQp2bkRrVGadgudZmWIaacY9KP7fiCac0jwCy+OZe1nQNuLIrKrnBi5zrM7qnE8jjd7j5qlo5dsNjOjLmg3c0eab2mFpvK3yXP1JF7qbTdWtGu2P8/9Nz22D8TuiSyeM9qSr5IB+S9OUmtPIN+IpgUTGimNm7nFDp8Q8F0GCfAQUoaFQPzKTNU3YkMcVTsNSKHdRrcKUXzoAOdDdMEjqnBsEgHpujxGrUBEiNCKIYFkdERtihC7VoYTCMlpxOcL7EJDugQrRODTWy3YMpwtAXB7vFyux5fhWaQM8xVUoWZSzqPRzNW9qS60RR0+mz0hJV+Rn9a8P//Z", "guatemala": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAgUAAQMEBv/EADQQAAIBAgUCAwUGBwAAAAAAAAABAgMRBAUhMVFBchITwTRhcZGxBhQjJDNCMlJigYKh0f/EABgBAAMBAQAAAAAAAAAAAAAAAAADBAEC/8QAHREBAAEFAQEBAAAAAAAAAAAAAAECAxESMiExQf/aAAwDAQACEQMRAD8A83LEzk9NAXWm/wBzMkEUxbpj8STcqn9W23a7Za3VyuC1qxmIguZyb5P+jU7kNIoWZPpRqW/mQzX+ySvpZRzDQ0vojNX3NEtr9Dl0NasV51/HR+DGaT6CzOk/HS+D+o210Ve5L+SFRWn1CV2WI19dC0RXRF10ACv7yA/2IGGE5OhC+guDZTqGvcCrBJ6GuTjJv0Knd6DMWZP+jPu9CZji6sMRh8NSl4XUertdkdc+raOYN1saCzGSnUozoNunJWtNPclKviK2GqUallWjBtVI/utwL2jOHWDWLFWc61aPPhZrkuLlisJ+I/FOm7SlyZZxpVodr+o+z0Vd5L4vdBaoq5e/QrSCT095cddepT2KRrGl3wiA3IAJr6Fg3CXRi3a0gkD1LVzQc5R7PPu9DGc0vtFS8x6ODjG/PQ3yn2Z93oTNsHPE4eM6MV50HdO9nYiuR6so5hpiqnmeNNJxjp40tLgUa0qWPjGpeMaNNzk2raNWVjHKa1b7u/PoylSpq0Xbr1v/ANOKWGxuLxfg8uUOib2UeL8Cdfcu5nzBp9nL+TXkk1Cc7q5rm7/Gpaftf1O/DUI4elGEFFWWtluL850r0uz1KrMek3eXCty17wUFbRlaRetmiJdS0iJOzNCyFWfJAYTItMpbloXBgkEr+IBOxogYcZVrhn3DGN+RdlS/K/5MYR3JKvsrKOYar4miWlr9DJGq3OXQ1qtxTnFniKfZ6jVbCrN3+Zh2+o210Vd5cC+IVuGCkWitINapcl2BRezYAdlwQitYhoJCFE6i4djXAUdQIhQ6gw8yz2RdzO1dDiy32NdzOh1GuCSr6so+Q6lqHHY41XmnZW34NFXnbp8jl07FqKM39qh2+p2xrztuY1qMcTNTqXva2jGW5xJd2M0ladi0MVgKP9XzAnhKcZQS8Wu+pTvCbSXFctPnk7Y4OlfeW3IUcDS5n8w2Gri0Id/3GlzP5kN2Zq//2Q==", "guinea": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAQIAAwYFBAf/xAAzEAACAQMBBQQKAQUAAAAAAAAAAQIDBBEhBRIxUXEyQYGRExQVIjNCQ1OSoYIjRGGi0f/EABkBAAMBAQEAAAAAAAAAAAAAAAABAgMEBf/EACERAAICAwABBQEAAAAAAAAAAAABAhEDEhNRBBQhMUFh/9oADAMBAAIRAxEAPwDMTv2+xHC5sodzWl87XQpWiD3GGSDg6MN3ILlJvLbY2BUhjJiHS1LEVpFkSGA6wMv2KtMjpZQgG5dB1wWSpLRDgA6zrgiQEu8bK1ARERv3iaIIADJCYIMDjhAtQ4yezkxqaohOgrjpqXU6VWfYpTl/E6myq1KrBwcIRqxXdHtLmdWK4anA8NOmbqNoz8Nn3c8Yovx0L47Ju38sI9ZHeimGrRjWpbk8446PAckVocNbNnFpSr0ItvHayWw2XOok4XFB5We13D3dxQsqdKNKO9Vl70s6qJfaSt76tGEqFSDWjTejWP8AoucbFqiv2HcZ+LS/Yy2Hcv6lLzZ3opJLTGNC2JXKIaozq2JdZ7VN+IJbEvVwhB9JGmS78Drhhi4xDRGSeyb6P0G+jQkrC8jxt6ngjYJYDjD6i4oNEY31K5+xV/FkNnhkDgg0R8tQQd4T1TmHoylCrGVPKmnpg1dJycIuSxNrVcji7Itd6SuJrRdhc3zO3HOTlyyTZ0Y00i2L1HlLC55TKlOKXvSiurErzo1IbruY03xUozWUzG0a0yvaEqVLZcajjHeags41eqOjOa9JbyWqbbX4nJnKjGgoxu6VSe9rvzwsdEWT9QqTzO893GNxT0Faser8Hahlxi2sNosi8M8MNo2aSXrFPC4aj+0LN/3NPzHsg0fg974DI8cb60eGrim/5Fsbq3fCvT/JBaFq/B6QviimNWEtFUg+kkWKSbzlPxHYqY+SAIOwPluA48id5FyRvmyaIz9Pi6S+fo9Kv7lQUY1NyK0SisCOvWm/erTfWRWkFHmOTZ7EYRX0huOc58RktRUOuKJLSCsdyH/YvBDAXQVyGTAkHwAYyCkuQFxGT0AKClhBUpL5pLo2KEBUi3fq/cqfkyC5/wAsgWw1j4OQuBEsEZEbZJubtnLhxqEaQyCu7Qvt6Eavab8DpUtnW7jlqT8TNRstzSOQh9DtU7K3j9JPqXxtqCXwYeRfIjul+HATyNk0sbailpTh5FioUvtx8kHIXul4MwmsBRqvQUsfDjx5IPoKWOxHyQ+Qe6/hlkwo1ataEsN0oPwFnY2yz/Rhw5C5FL1S8GXWMp8g9+hpFY2rePQwJ7NtG/hLzYubLWdP8M7lcyGl9k2f2v8AZkDmx9l4P//Z", "honduras": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGwAAAwEBAQEBAAAAAAAAAAAAAAECBQYDBAf/xAA3EAABAgQDBQMLBAMAAAAAAAABABECAwQhEjFBUWFxkZIUFRYFBhMiIzJCUmKBoSRTVHIzweH/xAAZAQEBAQEBAQAAAAAAAAAAAAAAAQMEAgX/xAAdEQEAAgIDAQEAAAAAAAAAAAAAARICExFBUWED/9oADAMBAAIRAxEAPwDkiCmMmRdM2OS+mwI7EnRo6TW4oGzIAukcwmLFQPKyDkfwjK6RyKqoLOhnKC+OxtsQ1yFEM3vqk9skH3n3INgUQyWiTPuqW/6q0ZBKEOhB6NE2R5KiCdDyXf4IflHJBgHyjkuff8aUfn7HYbbkiCNDyXfmGFzYNwUmCE/DDyTf8KOBiueCXNdd5RrpdFNkwxSCccXvYQxG7fkvuhggighJliEkPhMIsrP7cdEYuEfLYgll3RlwAgYIcssIRHKlk/44G/qFN/wo4IkDVJxiXdRSZRJ9lAcvhCzzU08VfFSw04EeEAPK137lY/bnoq5bEL5IJ3hduKaQS5ky3P0BPslNkaeUb/IE3wUcQWxC6OJXaxUdMXenk9AS7DS2/TyukJvgo4q25C7Xu+k/iyuhCm6EpLR1ZKLVNroiueK52iC5uknEX4KSbfdRXlUU8meYTNgERFg+j7Fbm32CzvKxrIZkjspcQnGRhya3+8loMRABEcRDOWZ16mEhNXMikyZkyCGGIwQuQS1l8vkupm1dGI5sAhiBwu9yRtGi+6ICOEghxsKCAC4ABIu2qcxwJiGq8OySRUCow+1LnE9zo3Be8RsFk9oq++fRkQ+iAwYmLbeaRz0NUD8J68CkTrvQ9zsKig35ozcjNADC9wjRBbDehP1dqEHKd++UGPtYegJ9+15v6WHpCzNW2Khku7Xj4wtLR79rz8cD/wBAl37XfNB0BZpzCW1NePhaWp39XB/Wl2+hLv6tP7d/oWYTptUuxTXj4tpa8PnBWDSV0p+IavWCV0rHBdMizqa8fC0tY+cNTb2UongUHzhqHvKlflZJeynMqasfC0tnxDP/AGJR5qx5xTdaaXzKwxeyoiyasfC0trxHMZjTQdRV+I4rfpoepYBz4J5pqxLS3/ER/iw9aFzzoU1Yl5ezZpgWzsjUqQVs8g5jck7pEpEkBAzcpMxSQ5cIBrlUzozdMCyikxZSc3VbApizdEMM6oEMoGRKsXd0C0QPumRmphzQSyFSEH//2Q==", "mexico": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGwAAAQUBAQAAAAAAAAAAAAAAAgABAwUGBAf/xAA4EAABAwIEAwUGAgsAAAAAAAABAAIDESEEBTFBElFhBnGBobETIiMycsEUQhUlNFJTYmNzgtHx/8QAGgEAAgMBAQAAAAAAAAAAAAAAAAIBAwQFBv/EACARAQACAgMAAgMAAAAAAAAAAAABAhExAxIyIUEUI1H/2gAMAwEAAhEDEQA/AMuD0CcCg0Qh1yOikIHNQzCAI11qiAuN0ItcFECgHrYr0zCmuFhPNjfReZmzDetl6Rl7q4DDf22+iI2s43YL3RN1QCyMJlg2qVoUQUrNkCGNeKTSA/vFE2tEsRbFz3vxlIGl6rDO3crpK0XRtNJGnkR6oWgcINUja4UJnTXg20SQMqWNPMJJsuL1eLNFRQ1RkackLbBEPlK1sghy1RDU/dMDS+ycUqgCA5r0TKzXLMJuPZtXnZBLaVXoGTGuUYU/0wiNrONZj5fFNNiIsO3imkawONBXdRzGRsVY6cQIJBNLLJZlO5swdNL7Rj3V4SPlBRa+F9a9m1iljlZxxPa9vNpXQ3Zed5Tjp8vxLHtJMJNHtO4qvQoniRjXNNWuFQeims5LavWWTxopj8Rb85QhS5iKZniPrUIp4rHbbtU+axKYaBOdD3IWojcdClO1ML6wxnm0eiS44JR+Hjv+UeiSbLlzR5K3dGD71tFG2tlINNlrc0ViNCiFrbIbd6M0rZAMdFvsolbHkWHkcCWtjrbosCK1C3uQHiyPDfSR5o+z02kxUsc0ERPw3SM4h3cuvcs/nbnTPbK+I8JFHNa3Wmh6BXMuHa/4GKfSeMl2Hey1uS45ZMdE0kYj2sdCHtcy58OqSa5+cr4vicYVuGZBjMKPZHgxTG0c2tBIP5evRbXLZXBkWGLD8OFh462PRUGX4RrZGTyw4VsUQq97Rdo5d60WWtf8SZ0heyV1WDZrdlMZgTbKjzYUzSenMHyXM0eC6s6FM0k6gHyXI0+6s9/UuxxeISt6o9B0QNKOtwkWOyKYCJgqLNCS4+IpIyzdGBHmEfVC2xKMV0W1whim2qe51QioCK1LeCAetDRbrs4a5JhzyLvVYYVrpstx2YIOSxDk5w80fZ6bWc2GixLB7Qe8y7XbtPNcM2X4t1S6SOc1sS3hICs2KQFTNYldE4cWDy57XOM8jXRkCkLRRo/2rWMAABoAAFhyUbVKwXqiK4RLN59bMnHm0FcDaqw7QD9YsJ3YFXMNaLLf1LscPiEzNlIgb/1Gq1wSDVJPTqUlGUYYMWKkbU0umcKPd3pDVvctzzSQV8KJDdM06b2RixQDiq23ZU1ycA7SOCxQ07ytp2TvlLxykP2RGz02u2nZG3ZBv4I26BOtSN1UzNlA3VTs0QGf7RftkX0fdVbLK17TCk8BGvCVUR3ssfJ6dbgn9cOhhJKk3spMPhmv1c4V5UVrBleHd83Gf8ksVystyRVTV70lov0VhP4XmUkdFX5Nf4//2Q==", "nicaragua": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAQIAAwYFBP/EADUQAAIBAgQEAgYKAwAAAAAAAAABAgMRBAUhMRJBcYFRkQYTFCNhghUiMjM0QlJTktFDocH/xAAZAQADAQEBAAAAAAAAAAAAAAAAAQIDBAX/xAAhEQACAQQCAwEBAAAAAAAAAAAAARMCAxFREkEEIWEUMf/aAAwDAQACEQMRAD8A48ddRk2ubXcVBT112PSwmcOR41qsdqkl3LFjMQtqsu5QndkvqJ26X0Uqns9kcwxH679UOszrrdRZ4kFmbsW30WrlWzorN6i3hp8GOs48YS7M5TFIfjW30OWpHaWcxvrGSLI5xStq2uxwWAl+HQOeo0qzWg7fXQyzCjL88fMzQCH4VOxq+zTe2Uv1R8xo4qm3o0ZfcF2ubJfhaZU/w1vrU+ZDMRm+Fa8vEhl+V7LlA8LXjvRmvlYjhNLWLXY31tReCL3jF9Udn6PhhEYFJkexunhqE39ajTfyorqZbgpb4ePbQc6CJmMjsviS+prXk+Cafumukil5FhJbOou45qQjZmGA0TyLDuTUKtS6V9jz/QkXGL9c4uW3FEavUbE7dRxGQ7UvR2rfSvBiP0fxXKUH3KkpfZPBnKuLyOnLI8atoJ9JCTynHRX3En0HzWxcWeAFr7nqeX4uO9Cpp8CqWFrrelPyY+SDDKtSD+qrftz8mQx9Ghu3/wACtRI1KctpxfcdWRyezcX8zGk9QW1bBLfoABK6jlGlNwV5W0HQAftAefEVPZqEacLcc1b+2ynA1+P3VVK0vs/0LXwksVipz9d6uaXCouN7IpnleIi1JYmmuF3TcWrGWX0vQ+zqUr3lB7wej+BZsyunNzgpeI3M0X8As5kK7u412uYxEe4r8Q6u5OQAG8fAguvgQAMHxNbN+Y8K9WOqq1F0kIBHpYRx5Z6Vj8XD7OIq/wArjrNscn+Ik+qPIxWJ0U6HyZ0o51jV/li+sUWwz7FrdU32OTHYZbkR06K5s6089qTtx0KcrbNNpjfTack54dyS5cehx/8AZGTDQ+h86jQR9Iqd0pYea6NDx9IcM96dVdjNAeoQ0hIzVrPcE93NdYliznAya99bqmZHkS4oEOVmyWaYJ7YiC7lix2EassRTv1MUviR9hQLY5Gbf2vD/AL1P+SIYbyIKD6EgeVuZNmbKrg8O73ow8jzyy/CSbvQhsWry0TGZUDepp55Vg2vu7dGUTyjCJ6Ka+YuRMng0cCL07jXszs1Mrw8UrOer8TyVcHTi7Jy8wVWQweEj2LZUoxejZU0VkQvMA3MEtAyIAVyByItxgMkCTaTsrsJHsAwdyBILAH//2Q==", "panama": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAQYAAgMEBf/EADoQAAEDAgMFBQUECwAAAAAAAAEAAgMEEQUhMQYSQXGBE0JRcpEiI2GCsRQyNUMVFiQlU2Jjc5Khwf/EABkBAAMBAQEAAAAAAAAAAAAAAAABAgMEBf/EACIRAAICAgICAgMAAAAAAAAAAAABAgMREhMxQVEEISIyYf/aAAwDAQACEQMRAD8AZxooNVDkoDYoEEgHUAoGGI6xt9ESsKurZBSSzB7XFjSQAb5o1yGcFjRwH8u3IlA0EdvYe9vVa0swqKaKVvfaCtRopdcX4HuziNC/uzf5BeW/FIaeeSKS+/G7dJAyTDdIuLj961Q/qFZSqivtHRT+f0z3mYtTOGUrc/HJasrYn2Iew8ilEjiq8Vnobun+joJ2H4rN7mnNpSfvyNvZzhyKuKqdukr/AFSdeSeFryNzJ26Oy+KuJGkXBBSgK6pH5p6hWGJVI7wPRSoSQnUxt3/iPVRKn6VqP5PRRPWXoXEx4tdxRspbNRdxxkGt0vbQUsfbQmGM9tKTdreNuNkwgKBjd/f3Rv6XtnZVCWryTJZQv4DSl8knaySsMJA7IOITICsxGztu1As+1iRx5rQBE5ZYJYINSkjGRbF6rzp3SRjf4vU+b/iyn0dfxu2cRVTqVCUNLrI7gEoHRHggdNEABQonRUOqBE6KKZ+KiAPSZidazNtTJ1N10sx2uabmRrubV5Q0RXr6R9Hg7M9tu0VS229FE7lcLoj2kHfpT8rkuoqeKI92NUe0NK45xyt6XXTHjVC8D3pb5mkJNaT4K6h0xK2HhlbSyD2KiM/MlHG/xaoIzaSMxyXKmzBGRvwmHfY1wz1aDxWFtWEb0XasTXaKp4kJ9kw+kkHtU0R+Wy5X4Jh7hfsLeVxXPodi+TES0E3v2donC4dK3kbrmfszD3aiQc2hLRlK+AsHRV5Jids0eFV6sWR2akF/2hnoUtWPmh7PBUXufq5P/Hj9CojVhyw9nlj6IoBWvndeyeKSyNvoopfNABb4K1skG21RN9EhkGoTbgWeEx+Z31SlrZNmz5vhLPO5YXfqXDs9F3BVtYH4Kyxq6ZtTCWlzmOGj2mxC5DVLLM/tTDXOpO+2MPv1WxuRZIzZZ2VfaMleH724JT6JzpIpIoAJpzO/UuIsOimLbNbK9fJcgkclRxNitbZKharMiu8VFayiAFh2CVLfuuY7quc4ZWNJ93fkU2VrzFTOczI31QpveQMc7MkLZXSM9EKTqOpbrA/L4LIxPafaY4cwncMaQckTEwi5CrnfoWgj6C1rI3yTjLTQuI3o2noud+HUjtYW9FauyGuBW0TVs7nhY/uOWD8JpDo1wy4OXTh4FJB2Uf3d8nPNRa8xHHs9JB7Q9rmnQixsqMeXC5srcVzmhiaOnNN9nMTey8Lf75q7G7kbWXvui1yroeKMA232UQKJ1UOgQBW6iKiAP//Z", "paraguay": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAAECAwUGBP/EADYQAAIBAgQBBg0FAQAAAAAAAAABAgMRBCExQQUGEhNRkZIVFjIzNFJhYnGBgqKxIiRCRFNU/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAEEAgMF/8QAIBEBAAICAgIDAQAAAAAAAAAAAAECEhMRFARRITFhA//aAAwDAQACEQMRAD8AxLIazaFsh2MD7iVuoGC2B6kUJFiVkQ3RYnqBCWiIyk08m+0m2VvMOZiBznZ5vtCMnpzn2kWFv1FTiPSxTl60u0fPn60u0huNMGMek+kne3Pl2lkcRWhLKrNfMo3G9LkJpHH06yEpOEXfVdYFFGrehTd35K/AExYOHNOjV3pTy91g6VT/ADmvpZ18nmOKvHc1aY9uo8v8chzZLVNfIWW9ztOanfJP5B0dN604P6UTS67n44zJ7j0OvlhaEo36Cm/pKXw7CSTvQh+CT/GVjy6uUloQOhrYbh8LydGKj6znZEIYPAVYpxp5PRqd0TTZe1RgZISOifCsJfzb7zBcMwlvNvvMabHao54aeZ0K4ZhL+a+5klwvB3819zGmx2qOeGjovBeCbypPvMHwnB/5yX1MabHao8NGu1RgrLKKA0vBeHWVp5e8BMJeGyr0y0Y45RSE1mSj1GpkSjfrLMiCZNWsAS0KqztQfty+Rc/JaKakXKm49hRh4KLxOI6Wo0m05yyvleyiltoLHtUatOvSsouLbila6vmj0wwnRzcqdRwmpt2eiT1XwIYrCdO5yr1HnZJRWSXsOfnkeyk3KnnnbK5N6WI04OEbPJ7rqJtWzKBaj6xQzaH/ACCmtSx7FdiV3ZBFlr7gJNW8oCcK43wnjr+kzJR4tjl/YfYjxy8qS6mxG/CvH08eZaMON49XfTJ/GKLo8fxySvKm7e6ZKHew119HMtqPKLFJO9Ok+0a5R1v5Yem/qZii+JNVVyltPlBz3+vCRdt1IiuO01K6wjv7Z3sY5B6k1VTKW74wReuGl3g8YYtP9s8/eRhbgkNVTKW6uUCX9Z94HyhW2GfeMLcCaqrlLdfKHP0b7h+MKt6L95gDsXVUylveMUf+Z94DByAmqplK2tHm1qi3UmQsevG0orE1bXzkzypXPWJ+HJpaBa4WsMvIdrRIMlqiN8gHYrccySYXAT/A7bjegJ5gR9otCbQrARYD2BEUrASAo//Z", "peru": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAAECBQYEA//EADMQAAIBAwIEAwUHBQAAAAAAAAABAgMEEQUhEjFBUQZhYiIyUnGhExRygZGxwRUjJELR/8QAGQEAAgMBAAAAAAAAAAAAAAAAAAECBAUD/8QAIBEBAAEDBQEBAQAAAAAAAAAAAAECAxEEEiExMhMiQv/aAAwDAQACEQMRAD8AqcbITBA9yk2TB7CJMA0fhh/41dev+C7M/wCGZbXC7NMv8lq35Zd6MVyfQjnmNPYTaRNySjusMw11xRu6yy9pvr5m3jLCMZqSxqFwvWzld6WtLzMubjl3f6i4pZ96W3mAiuvYg+OXxS/U97GpJXtL2pYbw9znysbnpbvF1SfqBCumNstVxPAHn9pDzAWWfhlorYHzQY2/MBtQA3uLmgaygC88MPFW4j6U/qaT/pl/DUmr6ou9P+S6uNQVK5VvCPFNr54ZYoqiKeWZf9y6qlWnTaU5xi30bGpRnHMZKS7plVOrb/1KbuJRlthZ3wyVKo6E7mpQpy4EvZi1tkPpOeXFZrCbMhrCxqlf8WTQ6bfO7hJVElUi+S7FDr22qVfNJ/QVyd1OYWdLP6V6AimDZwaBjg8VYPzQhPZxfZgjV01KSx1AcJZhF46ALEM9l5L2n5Mb2HUWK016mRfPcbSgfIOgmg5IDWvhzbU/nBo6KdSFLVXN+03LG/RnHoMsarS8019Cx1SLo31KqoJRTTzgl/LM1XtW3kYUb6qottqfX5l5bxqq6nxyzDCfvFRKClc151EnOU21nseNWShJTi6inlJRTfMhN+JqxgqbPCxs6s46u+GUfs5yaajywcviNY1FP4oJkqVrOte4pT9jjy2nyJeJYpXVF9HDH1OkZ2yem4rwpMbhsHUCDRMUuQ88hMA0tF5o036V+wHBSrtUYb/6oAU9qvuFi6qNfEzzaPa7XDdVF5ni0C5T0AFuDA3ZpDxqtvj4sfQ1tehC4pcFRZRjtOfDqFvJfGjane1zExLP1XpSVrO7jF0oUo1Ir3XNJtLtkjC0uqU5YtYb7KSw2vkXvUJcx/KHGK5iMOLTtPhZOU+KTnLZp9Ct8Tre3l80Xz5lL4mjm2oS7SwOqmIpxCdicVwzmcA+YeQ2VmmQLd79B8xAT3jVxFLsgOf8wE57XZqMXG9qZWGc/Qs9Ygvv0n5IrcLJOqMSdE/mHmDG1uJkU3ravhuqMuimv3N10MFRf9yH4l+5vF7p3tKWq7gYE+ZIjLkdlM8blR4jjnTk+00XDWGVniBZ0yf4kRq6dbXuGSJY27i5DXJlRqEtk0NLIu5JcwBYAYAH/9k=", "puertorico": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAgUAAQYEA//EADkQAAECAwUEBggGAwAAAAAAAAEAAgMEEQUhMUGSEhWRoUJDU1RxgRMUFiJRUmGCBiMkMjNEcqKx/8QAGgEBAQADAQEAAAAAAAAAAAAAAAECBAUDBv/EACARAAIBBAMBAQEAAAAAAAAAAAABAhITIVEDBBEUQTH/2gAMAwEAAhEDEQA/AMm6bjuvDgPAIDHinGIUAUoDisuTr/sS8PZj/JosxHnFzj5qeNVGscTQAk/RejYEd37YTyP8VqeNYZ0E4+YABqKjBEvZshNOwgP4L2Flzh6nmFPGWqK/TlGCseC7W2ROHoNHi4L0FjzZyhj7kpYrjs4PFWAmIsabpjD1IxYc1jtQ9SUsXI7FqLKiY7jmj0oepELCm/mhakpZbkdi0YYqYJluObvvhalNxzmNGH70pYuR2L6D4qJjuOd+VmtRKWLkdmcCsKl6wGeljMYOkV2PfD57z3BQcWuBaSCMCE0lLWc0BkyC4fOMfNcE3BEvMvh5C8eC8gsXCMkVTlHBrIT2RmBzHBzfiF6txWUl48WXftQnkfTIpqy2hsDagEvAvo65a8+NxybMORSx+jpqMBI9+t7udSIW8cpcal41o2LM9D0IgKUqkO/nd3bqV7/iZS7NRUrRbM9D8VCMLPC34nd2aij3/EqR6u3Ula2LE9GgCLJZ8fiB4/rt1Ix+IXd2GpLiFieh8okftEe7DWolaFmejI4J3Zpl4jNuHBayK3FJF2Ss56rLubDFYjjicAFuzTawc+EknkaT8dsvC2vRh0R1zSRVIiauqcSuqNOumJYQooq9pqHDPxXLmsuOPiyTkl68FhE3FU1pe4NY0uOQCawbGe5oMWJ6Nx6IFaLKc1FZJCDk8C1xFFBcQnLbCYTfHf5NXo2woOcaJwC5nInJ+pHY4uSMI+N+iNXmnosOBW+LEPkF6NsOX7SJyWFuR6X4bM/0frVHkn+4pftIvJWLAl6fyxeSW5Fvw2Z8IloBYEv20Xkr9n4OUaJwCW2W/DZnlFofZ6F27+AUS3Il+GzHfVQYqKwuscAtdEtKRJl9GC4YuOAXOx7Q4FzdofCtEwZa72NDYcCG1owC8J86jhG1x9WcstDeTk4cq33BV2bjiV1tWeNszOTYY8lDa83W4sH2rVfIn/TaXXkjSBGLlmt7TmURo+0Kt6zp67g0KXEZfPI1AxRrK70nT154BELTnLv1DuSXEPnkasZI24LJbzne8O5Ihak7h6w7gEuIfNI1uaMLIi1Z4f2DwCIWtPDrzwCXEX55GtUWT3vPdv8A6hRLiJ88hB4qq3oXONFTTUr05eZvCMev14pVMMXFWMVbG7RvJXTDlmOF7ncVreG76c6Mc0xh2dBdSpfxXuyy5cm/b1JSK0J8EQTWHZ0uY8VpDyG0p7y6W2XK0HuE/clJLiEYVj/qeizZUdXzXoLMlKD8rmVaCXUIAiCfGzZQH+IcSiFmSnZcylBbqEAVp/uyUu/K5lEyy5Qkj0Z1FKC3UZ+ii0gsiTp+x2oqJSS4j//Z", "rdominicana": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAAECBAUGAwf/xAA4EAACAAUBBAYHBwUAAAAAAAAAAQIDBBEhMQUSQXETUWFygZIGFTRDgpGhFBYiIzI1UyQzUmJj/8QAGgEAAgMBAQAAAAAAAAAAAAAAAAECBAUDBv/EACARAQEAAQQDAQEBAAAAAAAAAAABEQISMVEDEyFBIjL/2gAMAwEAAhEDEQA/AORe1qyJXc1eEKIRbRq28z4vCxVWiG1m5anj0z8QzXtFWVLeZ8z5kHPnPWdM8xBahxHs09FmpOONtXjifiSlt9JDra5Dd7T0kq86DmgsnQ+voEvEqFcd1E4r7j5EYViHsRKYvy4uuzKtddPMcbxfNg9MjB2aKjagBYVg5hyEZNO10MLY1B/pAFdAFgAMjKs2O932A2rLIctDYefDHbHaFm3hO/IkpUx+7jfKFhkFc9Kdf1EvvISp570kzH8LLNJSVP2iU3TzLKJXe6yNswI7paIU3+1G/wDVkZ1RJkK86ZDB1XYukl1FPHFJmQzE4XbdfYVa66eY5K2ALS2dW/wR2J+q6zH5D8Wiritffp7Unhqw7Fz1TWP3a8YkSh2NWW/RD5g20ezR2oD4W4mh6lrW7/gS7xJbEqmsuX5g20e3R2ygNb1FU/5y/mAttL26O2lDQ0qfs0nyIn0EmF2hlS18CPVaibV9UvEuZZGB0cC0gh8qJpJRYIdJAtZkC8UHTyk8zpa+JCye29PS+dWF3ex4uqp17+X5kCq6aKLdVRLbbwkwyNt6YFZPiVc50l7kMMdo7u7iS5lvY85/a0pm7FMmKK8XFW4dpbnbMhimxxw7kW+7tRq6T6yUmjk0O9URbsKhWd1YXWQ3W/hYxGhDrox6mY9u7OT9ovyhZGL0g2cmn00T5QM6YpZaeo4dLMyH6Q7P035j+AT9JKG+Om8gYo+Nl6DhytDEfpLRWsoJzXH8KF95qRaSZ30Hto+N6y62Bz/3opf4Jv0AW3UWYw+kjesyN84mJttav5kR6lPNbm2dH9R46kCWAhSvbxEeIfE96JN1crvI8cbyZZoVetk9W+h6eUfJP5rrG8sq7Uxsup7ZbLd8sp7V/aql/wDNlycsWuDV2tRu4tFjUH2ltAWSBZxawOwQ4tfLAG8JAuN8Dv2CVgAuwHZdoCC4u0aEuI+JkPQJLirBxTHpZhxADhgtbOTdbJ7yK64lug9tk99DnKHk/wA11LVncpbZbWyaruMvJ3+ZR23+1VPcLk5YlcJcNbIXEC2jDvlX5A9GRcTfgF3ugEr3WBpWSx4keok3kWSSx1gIAN//2Q==", "uruguay": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGwAAAQUBAQAAAAAAAAAAAAAABgECAwQFAAf/xAA9EAABAwICBQcJCAIDAAAAAAABAAIDBBEFBhIhMXGSExQyQWGBkRUWIjNCUVOCoSQ0Q0RSVHKiI2JjsdH/xAAZAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAX/xAAkEQACAQQCAgIDAQAAAAAAAAAAAQIDERITFFExQQRhISJSI//aAAwDAQACEQMRAD8AKQlc9sbS9xs1ouU1z2MGk9wa33lUq6cU7HSO0ZaZ2qRt+j2jsUbsvyErmg+VsTWudsc4DxTxKwzGIG8jRcgdQQtzuZ7YaaznNbMC1227eoqaixN7ZppC3lKmU62+zGNguVxVdXOmphMBZPBAFzqAVClq2XEbpjNOdb9Bt2tPu1agrFWNKinH/G7/AKXoj+zOT/BYEkbtkjOIKQEHWCPFebN2DX9VI2RwHSPcSvVx/s5bD0gXKXRHW0d4XnrKiZvRmeCPc8q1HiFYzZUy8SnGfY2IORGwjWxvgu5CP3W3FB8eM17LWqCf5AFW48wVjT6TYnjtbZYfxpGlUQS83HsvI+qQxyN2EOsseLMmu0tN3td/6r8OOUUmpznRk/rC4y+O16NqaZb0nfoK5dzylP5iLiC5c9RrIxZNLRIbG2QnaHGwWDiMDojyhpDA0bTFMAD3FEFiWkNOieo2vZZVbQtkk0Qw1dUdelKbMZ222KVFdGoOzKdPoU8EL2SOZEW9AC+veo61rBTxiSdji4lztNps/eAldDUU01UBK6Tk4y+R51DS6rBOZSVEtRFHM+0row+KQ7Setp7F81UpZHpyVjWwh8wgHIQUzoyOlG+30WwNYFxt2hZlHS07hpmHkalps7RNrHs7FpOvo3HuPivqU07JHkm0JzaA7YIuAJeZ0x200R+QIJGKVzXutVy6js0lKzF68H73J9F7NM+zhnELzhtE7bSxcKacHw99r07RuJCGWY3iI/MX3tBVhmP1zdro3b2Jqq+mMom47AKEjUyRu5yidlyA9CeRp7QCqLMyVQtpRQu8QrMeZL206XhcmNZC8GNflyUerna7+QsqsuD10QvyQeP9Dda0WYqVx9OOVn1V2HFaKbo1DQfc7Urtqx8oYwfgEuaT/t5OBcjjloviM4guU5D6GtdmGDsTwg/zlrD+FCO4pfOWuvqbDwlY0yNZoJjRtMFQzSu+c3c4qxJAyVjGkdAggjaLIU85K4Dow8KUZkrtujDwqceXQ2oMOu6ftFkHjMlbfow8JTxmWt/RDt9xVVCY2I3PIFASSYn3O30yuGX6DX6MgP8ANY7czVeoGKE9xUzczVPXTwnvK3jVM3gaRy5RE6nTD5rpDlqnJ9GeUbwCqrMzSe1TM7nFTMzODbSpT22en+w/QectAdGqPexRuy5OOjPG7sNwp2ZlgJ9KnkG4gqyzMFE7aJW723VzrIWgZTsCrmbGNeOxyry0NVF6ynkHddE0eLUDx94aP5AhW46iCX1c0btzgnImvKJrT8MB9Bw9g8K5Hug39I8FyvK+hqfZ523K7766tur/AEUoyvs+2f0UozNR7RFP4BOGZqW4/wAE/wBFjKqatEjGVx+7PAnDK4GoVZ4FJ5zU3wJvonNzLSg35Cb6K5VSWgRjK4287PAlGVz+7/opRmalP4E30TxmWlvrim8AmVUWgQ+a7gdVYOBOGWJOqqZ3sKsDMtIfwpvAKRuZKInW2YfKmdUYxKgyzUdVREe4rjlysGySEjeVpNzFQdZlG9ilbj2HkeucN7Cmyr0MYmN5Ar26g2N25yQ4PXs2wE7iCiBmMYe78y0bwVYZiFG+2jUxH5rK76ntDCIJOoauPpU8o7dFMLSw62uad1kcMmid0JWO3OBTzG149JrXDtF1V8l+0TX0wF5Z/wAV/GVyNuZUvwIuFcnIj/I1vs8vbguJWtzV3iFKMDxEn7vb5gjQpQBbYsb5GtaAwYHiN/u/9gpBgeI/A/uEYKQdSb5DWgM8hYjb1H9gnDA8R1fZzxBGQ6k5qciQ1oDRgeIj8seIJRg+INJ+yvt3I0Ce1XkSGtAV5LrxtpJNSXmFaNtLNwo2T/ZV5D6JrQC82qG9KCUfIUoje0ekx43tKOgTbanHXtV5P0TWAQNj7lZiqJo+hM9u5xRnyMTx6UTDvaFE7DaOTpU0fcLK74vyhg17BrynW/upFyIPIdB8I8RXK7KX8ktLs//Z", "venezuela": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABMAHIDASIAAhEBAxEB/8QAGgABAQADAQEAAAAAAAAAAAAAAgMABAYBBf/EADIQAAEDAwEGBQIFBQAAAAAAAAEAAgMEESExQVFhcZGSBRIUIjITUjRCVGKBQ1NyodH/xAAaAQEBAQEBAQEAAAAAAAAAAAABAAIFBAMG/8QAJBEBAAEDBAEEAwAAAAAAAAAAAFEBAhMDERQVUgUSIUFCYWL/2gAMAwEAAhEDEQA/ANvddIIA52KgX5OrpG24sqaOsFIBUAN8lBUwCnZTGbnYnzTRFzSCFlQapoiaqtUm6KjdEpUHeU2oBUCGSCSASCNxVcPwMrFFYun73n9rkBWUwGaiLuTbW0v6iLuXHADSwTGCRYfwvZ1Nvkxyaw7H1lN+oi7lQVtL5repi7lxg0SGpNgjqLPJcqsOzFdSgfiYu5P1tLf8RF3LjGm54bl7yHRPUWeR5VYdsKyl/UxX/wAkhV0o1qIu8LlKzw+eibGahvlbJ8SDk8VteI01FDBA6llMjy0fUbgeU23I6qzyXJrDpW1NOceoi7wrNqID/Xi7wuZq6Wii8Ogmgmc6U/NuDY62KjLRTw00VRJGBFJ8XA3BRT0q2v5Lk1h2DZ4Tn60fcFZr2HR7DycFwrbW0srNT1H9Dk/p24sdCOqYBXEtJ2EjkVVskgGJHi25xXzr6Pd9XHkUh2PlO4rFx/q5/wC/J3FYtddfKzUckEwQFNum+yY0C7ryGON8JjWxF7oDCV7YUi0PFfTfR0sfhTKmOqHqPMLsvfym2mFreFspJKsCte5kQyXXFkaqOKKpkZA8viafa4kG/HCzX5rsTmraipYxksrntYAA0nGERYWUmkWVW6BapTYGL7MLfNZUVEUdPNUH6QP5jj+bLRboqN5IrTdPp+J0UNHMxtPOJmuFzke3gtRpsFt+GU9JUMnNTOY3BvsOMn/uFqiw0N911W1+lsoN2xIab0RobWTAPHRboHluAWLPLxKxZ2T4DaaPGvVMU8ZuM35pM+INtqYXNy3y7ODTgW08fG3Neinivo7qqNFrXymNRtRlvk4NOA9NFr7uq9FNFr7uqoMpAccIy3ycGnCYpYz91+aqKWMj83VIFUbdWW+Vg04EU0f7uqo2kj/d1SaqtwVZr5WDTgRSx4y/qqtpI76u6psCrxRmvk8fThMUkf3P6pGjZ971YJgKz6krjaUNf0bPvd/pYthYrkakrjaUOPabDGcqosOakNLqjPiENGOGiY1xoizKYwgvReyYwFnHgvdiC9Co21sKbfimwqSgzoqt0UhorNQVY863WwNlzZazMkLYGgKiQztsUxdeN2JbVksusXnmO9Yov//Z"};
+function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+function es(t, mostrar){ return `<span class="es">${mostrar||t}</span><button class="som" data-fala="${esc(t)}" title="Ouvir em espanhol" aria-label="Ouvir">🔊</button>`; }
+function bd(id, cls){ return `<img class="bandeira ${cls||''}" src="${FLAGS[id]||''}" alt="bandeira">`; }
+
+// Os 21 países, na ordem da atividade 2 da p. 71 (capitais conferidas no mapa das p. 68 e 69)
+const PAISES = [
+ {l:'a', id:'mexico', p:'México', c:'Ciudad de México'},
+ {l:'b', id:'guatemala', p:'Guatemala', c:'Ciudad de Guatemala'},
+ {l:'c', id:'elsalvador', p:'El Salvador', c:'San Salvador'},
+ {l:'d', id:'panama', p:'Panamá', c:'Ciudad de Panamá'},
+ {l:'e', id:'honduras', p:'Honduras', c:'Tegucigalpa'},
+ {l:'f', id:'nicaragua', p:'Nicaragua', c:'Managua'},
+ {l:'g', id:'costarica', p:'Costa Rica', c:'San José'},
+ {l:'h', id:'cuba', p:'Cuba', c:'La Habana'},
+ {l:'i', id:'puertorico', p:'Puerto Rico', c:'San Juan'},
+ {l:'j', id:'rdominicana', p:'República Dominicana', c:'Santo Domingo'},
+ {l:'k', id:'espana', p:'España', c:'Madrid'},
+ {l:'l', id:'venezuela', p:'Venezuela', c:'Caracas'},
+ {l:'m', id:'colombia', p:'Colombia', c:'Bogotá'},
+ {l:'n', id:'ecuador', p:'Ecuador', c:'Quito'},
+ {l:'ñ', id:'peru', p:'Perú', c:'Lima'},
+ {l:'o', id:'bolivia', p:'Bolivia', c:'Sucre'},
+ {l:'p', id:'paraguay', p:'Paraguay', c:'Asunción'},
+ {l:'q', id:'uruguay', p:'Uruguay', c:'Montevideo'},
+ {l:'r', id:'argentina', p:'Argentina', c:'Buenos Aires'},
+ {l:'s', id:'chile', p:'Chile', c:'Santiago'},
+ {l:'t', id:'guinea', p:'Guinea Ecuatorial', c:'Malabo'}
+];
+const P = id => PAISES.find(x=>x.id===id);
+function linhaPais(id){ const x=P(id); return `<div class="pais">${bd(id,'p')}<div>${es(x.p)}<br>🏙️ ${es(x.c)}</div></div>`; }
+
+const BLOCOS = [
+{ id:'b1', emoji:'🗺️', titulo:'O mapa na lousa', tema:'Abertura da Unidad 8: um mapa com países, bandeiras e capitais', pag:'p. 68 e 69', cor:'#3a8fd6',
+  html:`<p class="fala">Rabi: "¡Hola! Daqui de cima eu vejo um mapa enorme pendurado na lousa da sala. Vamos descobrir o que ele mostra?"</p>
+<p>A Unidade 8 do livro se chama ${es('El mundo hispanohablante')} — o mundo dos países que falam espanhol. Na abertura (p. 68 e 69), uma turma olha para um grande ${es('mapa')} pendurado na ${es('pizarra')} (a lousa da sala).</p>
+<div class="regra">📌 Para <b>cada país</b>, o mapa mostra <b>3 coisas</b>: o <b>nome do país</b>, a <b>bandeira</b> (${es('bandera')}) e, embaixo do nome, a <b>capital</b>.</div>
+<div class="exemplo">👀 Exemplo do mapa: ${es('MÉXICO')} → a bandeira ao lado → embaixo, a capital ${es('Ciudad de México')}.</div>
+<p>Na p. 68 aparecem <b>19 países</b>. Virando para a p. 69, na outra ponta do mapa, aparecem mais <b>2</b>: ${es('España')} (capital ${es('Madrid')}) e ${es('Guinea Ecuatorial')} (capital ${es('Malabo')}). No total são <b>21 países</b> — é a lista de nomes da p. 70.</p>
+<div class="caixa">❓ Na p. 69, o livro pergunta: ${es('¿Qué tipo de texto aparece en la imagen?')} As opções são ${es('un juego')} (um jogo), ${es('una noticia')} (uma notícia), ${es('un mapa')} e ${es('un gráfico')}. A resposta é <b>${es('un mapa')}</b>!</div>`,
+  palavras:['mapa','pizarra (lousa)','bandera (bandeira)','capital','país / países','hispanohablante'],
+  qs:[
+   {q:'Na p. 69, o livro pergunta: "¿Qué tipo de texto aparece en la imagen?". Qual é a resposta?', fala:'un mapa', o:[
+     {t:'un mapa',ok:1,w:'Isso! A imagem da abertura é um mapa, com países, bandeiras e capitais.'},
+     {t:'una noticia',w:'Una noticia é uma notícia, como as de jornal. A imagem da abertura é um mapa.'},
+     {t:'un gráfico',w:'Un gráfico mostra números em barras ou linhas. A imagem da abertura é um mapa.'},
+     {t:'un juego',w:'Un juego é um jogo. A imagem da abertura é um mapa.'}]},
+   {q:'O que o mapa da abertura mostra para cada país?', o:[
+     {t:'O nome do país, a bandeira e a capital',ok:1,w:'Exato! São as 3 informações de cada país no mapa.'},
+     {t:'Só o nome do país',w:'Tem mais: junto do nome aparecem a bandeira e a capital.'},
+     {t:'Só as bandeiras, sem os nomes',w:'Os nomes aparecem sim, e embaixo de cada nome vem a capital.'},
+     {t:'O nome do país e a comida típica',w:'O mapa não mostra comidas. Mostra nome, bandeira e capital.'}]},
+   {q:'Quantos países há, no total, na lista de nomes da p. 70?', o:[
+     {t:'21',ok:1,w:'Certo! São 19 na p. 68 e mais 2 (España e Guinea Ecuatorial) na p. 69.'},
+     {t:'19',w:'19 é só a p. 68. Faltam España e Guinea Ecuatorial, que aparecem na p. 69. Total: 21.'},
+     {t:'12',w:'12 é a quantidade de bandeiras da p. 70. A lista de nomes tem 21 países.'},
+     {t:'9',w:'9 é a quantidade de bandeiras da p. 71. A lista de nomes tem 21 países.'}]}
+  ]},
+
+{ id:'b2', emoji:'🏙️', titulo:'As capitais "Ciudad de…"', tema:'México, Guatemala e Panamá', pag:'mapa p. 68 e atividade 2 da p. 71', cor:'#ff8a3d',
+  html:`<p class="fala">Rabi: "Olha que truque legal: tem 3 países em que a capital tem o MESMO nome do país, só que com 'Ciudad de' na frente!"</p>
+<div class="galeria">
+ <div class="item">${bd('mexico','g')}<br>${es('México')}<br>🏙️ ${es('Ciudad de México')}</div>
+ <div class="item">${bd('guatemala','g')}<br>${es('Guatemala')}<br>🏙️ ${es('Ciudad de Guatemala')}</div>
+ <div class="item">${bd('panama','g')}<br>${es('Panamá')}<br>🏙️ ${es('Ciudad de Panamá')}</div>
+</div>
+<div class="regra">📌 ${es('Ciudad')} quer dizer <b>cidade</b>. Então ${es('Ciudad de México')} é "a cidade do México".</div>
+<div class="alerta">🚨 <b>Cuidado com a grafia!</b> Primeiro vem o <b>I</b>, depois o <b>U</b>: <b>C-I-U-D-A-D</b> → ci-u-dad.<br>❌ "Cuidad de Guatemala" &nbsp; ✅ <b>Ciudad de Guatemala</b></div>
+<div class="caixa">✍️ A capital do Panamá mantém o acento do país: ${es('Ciudad de Panamá')}. E ${es('México')} começa sempre com <b>M maiúsculo</b>.</div>`,
+  palavras:['Ciudad (cidade)','Ciudad de México','Ciudad de Guatemala','Ciudad de Panamá'],
+  qs:[
+   {q:'Qual é a capital de Guatemala?', fala:'Ciudad de Guatemala', o:[
+     {t:'Ciudad de Guatemala',ok:1,w:'Isso! Guatemala é um dos 3 países do truque "Ciudad de…".'},
+     {t:'San Salvador',w:'San Salvador é a capital de El Salvador.'},
+     {t:'Managua',w:'Managua é a capital de Nicaragua.'},
+     {t:'Tegucigalpa',w:'Tegucigalpa é a capital de Honduras.'}]},
+   {q:'Qual destas está escrita do jeito certo?', fala:'Ciudad de México', o:[
+     {t:'Ciudad de México',ok:1,w:'Perfeito: C-I-U-D-A-D, e México com M maiúsculo e x.'},
+     {t:'Cuidad de México',w:'Trocou a ordem do i e do u. O certo é Ciudad: ci-u-dad.'},
+     {t:'Ciudad de Méxica',w:'O país é México, terminando em o.'},
+     {t:'Ciudad de méxico',w:'Nome de país começa com letra maiúscula: México.'}]},
+   {q:'Em quais países a capital é "Ciudad de" + o nome do país?', o:[
+     {t:'México, Guatemala e Panamá',ok:1,w:'Exato! Ciudad de México, Ciudad de Guatemala e Ciudad de Panamá.'},
+     {t:'México, Colombia e Perú',w:'Colombia tem Bogotá, e Perú tem Lima.'},
+     {t:'Guatemala, Honduras e Cuba',w:'Honduras tem Tegucigalpa, e Cuba tem La Habana.'},
+     {t:'España, Chile e Uruguay',w:'España tem Madrid, Chile tem Santiago e Uruguay tem Montevideo.'}]}
+  ]},
+
+{ id:'b3', emoji:'⛪', titulo:'As capitais com "San" e "Santo"', tema:'San Salvador, San José, San Juan, Santo Domingo e Santiago', pag:'mapa p. 68 e atividade 2 da p. 71', cor:'#8e5bd0',
+  html:`<p class="fala">Rabi: "Outro truque! Cinco capitais começam com San, Santo ou Santiago. Vamos separar cada uma no seu país?"</p>
+<div class="paises">${linhaPais('elsalvador')}${linhaPais('costarica')}${linhaPais('puertorico')}${linhaPais('rdominicana')}${linhaPais('chile')}</div>
+<div class="alerta">🚨 <b>Pegadinha:</b> o <b>país</b> é ${es('El Salvador')}; a <b>capital</b> é ${es('San Salvador')}. Os dois com <b>S maiúsculo</b>. ❌ "El salvador" &nbsp; ✅ <b>El Salvador</b></div>
+<div class="caixa">✍️ ${es('San José')} tem acento no <b>é</b>. ${es('Santo Domingo')} é de ${es('República Dominicana')}, e ${es('San Juan')} é de ${es('Puerto Rico')} — não troque!</div>`,
+  palavras:['San Salvador','San José','San Juan','Santo Domingo','Santiago'],
+  qs:[
+   {q:'Qual é a capital de Costa Rica?', fala:'San José', o:[
+     {t:'San José',ok:1,w:'Isso! San José, com acento no é.'},
+     {t:'San Juan',w:'San Juan é a capital de Puerto Rico.'},
+     {t:'Santo Domingo',w:'Santo Domingo é a capital de República Dominicana.'},
+     {t:'Santiago',w:'Santiago é a capital de Chile.'}]},
+   {q:'No país El Salvador, a capital se chama…', fala:'San Salvador', o:[
+     {t:'San Salvador',ok:1,w:'Certo! País: El Salvador. Capital: San Salvador.'},
+     {t:'El Salvador',w:'El Salvador é o nome do PAÍS. A capital é San Salvador.'},
+     {t:'Santo Domingo',w:'Santo Domingo é a capital de República Dominicana.'},
+     {t:'Santiago',w:'Santiago é a capital de Chile.'}]},
+   {q:'Santo Domingo é a capital de qual país?', fala:'República Dominicana', o:[
+     {t:'República Dominicana',ok:1,w:'Exato!'},
+     {t:'Puerto Rico',w:'A capital de Puerto Rico é San Juan.'},
+     {t:'Chile',w:'A capital de Chile é Santiago.'},
+     {t:'Costa Rica',w:'A capital de Costa Rica é San José.'}]}
+  ]},
+
+{ id:'b4', emoji:'🌴', titulo:'Mais capitais — parte 1', tema:'Cuba, Honduras, Nicaragua, Venezuela, Colombia e Ecuador', pag:'mapa p. 68 e atividade 2 da p. 71', cor:'#24a36b',
+  html:`<p class="fala">Rabi: "Agora as capitais que não têm truque. A dica é ouvir e repetir em voz alta, separando as sílabas!"</p>
+<div class="paises">${linhaPais('cuba')}${linhaPais('honduras')}${linhaPais('nicaragua')}${linhaPais('venezuela')}${linhaPais('colombia')}${linhaPais('ecuador')}</div>
+<div class="caixa">✍️ ${es('La Habana')} tem <b>La</b> na frente e <b>H</b> maiúsculo. ${es('Bogotá')} tem acento no último a. ${es('Tegucigalpa')} é comprida: te-gu-ci-gal-pa.</div>
+<div class="alerta">🚨 ${es('Venezuela')} se escreve com <b>z</b>: ve-ne-<b>z</b>ue-la. E não confunda: ${es('Caracas')} é de Venezuela; ${es('Quito')} é de Ecuador.</div>`,
+  palavras:['La Habana','Tegucigalpa','Managua','Caracas','Bogotá','Quito'],
+  qs:[
+   {q:'Qual é a capital de Cuba?', fala:'La Habana', o:[
+     {t:'La Habana',ok:1,w:'Isso! La Habana, com H maiúsculo.'},
+     {t:'San Juan',w:'San Juan é a capital de Puerto Rico.'},
+     {t:'Caracas',w:'Caracas é a capital de Venezuela.'},
+     {t:'Managua',w:'Managua é a capital de Nicaragua.'}]},
+   {q:'Tegucigalpa é a capital de qual país?', fala:'Tegucigalpa', o:[
+     {t:'Honduras',ok:1,w:'Certo! Honduras → Tegucigalpa.'},
+     {t:'Nicaragua',w:'Nicaragua tem Managua como capital.'},
+     {t:'Guatemala',w:'Guatemala tem Ciudad de Guatemala como capital.'},
+     {t:'Ecuador',w:'Ecuador tem Quito como capital.'}]},
+   {q:'Qual par país – capital está CERTO?', fala:'Colombia, Bogotá', o:[
+     {t:'Colombia – Bogotá',ok:1,w:'Exato!'},
+     {t:'Venezuela – Quito',w:'Quito é de Ecuador. A capital de Venezuela é Caracas.'},
+     {t:'Ecuador – Caracas',w:'Caracas é de Venezuela. A capital de Ecuador é Quito.'},
+     {t:'Nicaragua – Bogotá',w:'Bogotá é de Colombia. A capital de Nicaragua é Managua.'}]}
+  ]},
+
+{ id:'b5', emoji:'⛰️', titulo:'Mais capitais — parte 2', tema:'Perú, Bolivia, Paraguay, Argentina, Uruguay, España e Guinea Ecuatorial', pag:'mapa p. 68 e 69 e atividade 2 da p. 71', cor:'#e0a100',
+  html:`<p class="fala">Rabi: "Últimas capitais! Duas delas ficam lá na outra ponta do mapa, na p. 69."</p>
+<div class="paises">${linhaPais('peru')}${linhaPais('bolivia')}${linhaPais('paraguay')}${linhaPais('argentina')}${linhaPais('uruguay')}${linhaPais('espana')}${linhaPais('guinea')}</div>
+<div class="caixa">✍️ ${es('Asunción')} tem acento no <b>ó</b>. ${es('Buenos Aires')} são duas palavras. ${es('Lima')} começa com <b>L</b> maiúsculo — capriche na letra para não parecer outra.</div>
+<div class="alerta">🚨 Não troque as vizinhas: ${es('Sucre')} é de Bolivia; ${es('Asunción')} é de Paraguay; ${es('Montevideo')} é de Uruguay.</div>`,
+  palavras:['Lima','Sucre','Asunción','Buenos Aires','Montevideo','Madrid','Malabo'],
+  qs:[
+   {q:'Qual é a capital de Paraguay?', fala:'Asunción', o:[
+     {t:'Asunción',ok:1,w:'Isso! Asunción, com acento no ó.'},
+     {t:'Montevideo',w:'Montevideo é a capital de Uruguay.'},
+     {t:'Sucre',w:'Sucre é a capital de Bolivia.'},
+     {t:'Lima',w:'Lima é a capital de Perú.'}]},
+   {q:'Malabo é a capital de qual país?', fala:'Malabo', o:[
+     {t:'Guinea Ecuatorial',ok:1,w:'Certo! Ela aparece na p. 69, junto com España.'},
+     {t:'España',w:'A capital de España é Madrid.'},
+     {t:'Ecuador',w:'A capital de Ecuador é Quito. Não confunda Ecuador com Guinea Ecuatorial!'},
+     {t:'Guatemala',w:'A capital de Guatemala é Ciudad de Guatemala.'}]},
+   {q:'Qual par país – capital está CERTO?', fala:'Uruguay, Montevideo', o:[
+     {t:'Uruguay – Montevideo',ok:1,w:'Exato!'},
+     {t:'Argentina – Santiago',w:'Santiago é de Chile. A capital de Argentina é Buenos Aires.'},
+     {t:'Bolivia – Lima',w:'Lima é de Perú. A capital de Bolivia é Sucre.'},
+     {t:'Perú – Sucre',w:'Sucre é de Bolivia. A capital de Perú é Lima.'}]}
+  ]},
+
+{ id:'b6', emoji:'🏳️', titulo:'As bandeiras', tema:'Reconhecer bandeiras e ler as descrições da p. 73', pag:'p. 70, 71 e 73', cor:'#e2483d',
+  html:`<p class="fala">Rabi: "Eu sou uma pipa colorida, então adoro bandeiras! Na seção Más acción (p. 70 e 71) são 21 bandeiras para dar nome."</p>
+<div class="alerta">🚨 <b>Não deixe nenhuma bandeira em branco!</b> Esta é a do ${es('Paraguay')}: ${bd('paraguay','g')}<br>Listras vermelha, branca e azul, com um escudo no meio da faixa branca.</div>
+<p>Na p. 73, o livro descreve 4 bandeiras em espanhol. Ouça e repare nas cores:</p>
+<div class="galeria">
+ <div class="item">${bd('cuba','g')}<br>${es('La bandera cubana tiene tres colores: rojo, azul y blanco. Dentro del triángulo hay una estrella.')}</div>
+ <div class="item">${bd('bolivia','g')}<br>${es('La bandera boliviana tiene tres colores: rojo, amarillo y verde.')}</div>
+ <div class="item">${bd('uruguay','g')}<br>${es('La bandera uruguaya tiene dos colores: azul y blanco. En la parte superior izquierda hay un sol.')}</div>
+ <div class="item">${bd('peru','g')}<br>${es('La bandera peruana es roja y blanca.')}</div>
+</div>
+<div class="caixa">🎨 ${es('rojo')} = vermelho · ${es('azul')} = azul · ${es('blanco')} = branco · ${es('amarillo')} = amarelo · ${es('verde')} = verde · ${es('estrella')} = estrela · ${es('sol')} = sol · ${es('triángulo')} = triângulo · ${es('parte superior izquierda')} = parte de cima, do lado esquerdo</div>`,
+  palavras:['bandera','rojo','azul','blanco','amarillo','verde','estrella','sol','triángulo'],
+  qs:[
+   {q:'Segundo a p. 73, qual bandeira tem as cores rojo, azul y blanco e uma estrela dentro do triângulo?', fala:'La bandera cubana', o:[
+     {t:'A de Cuba',ok:1,w:'Isso! "Dentro del triángulo hay una estrella."'},
+     {t:'A de Bolivia',w:'A boliviana é rojo, amarillo y verde, sem triângulo.'},
+     {t:'A de Uruguay',w:'A uruguaya tem azul y blanco e um sol.'},
+     {t:'A de Perú',w:'A peruana é roja y blanca.'}]},
+   {q:'Complete: "La bandera boliviana tiene tres colores: ___."', fala:'rojo, amarillo y verde', o:[
+     {t:'rojo, amarillo y verde',ok:1,w:'Certo! Vermelho, amarelo e verde.'},
+     {t:'rojo, azul y blanco',w:'Essas são as cores da bandeira cubana.'},
+     {t:'azul y blanco',w:'Essas são as cores da bandeira uruguaya (só dois colores).'},
+     {t:'roja y blanca',w:'Essa é a bandeira peruana.'}]},
+   {q:'Qual destas é a bandeira do Paraguay?', fala:'Paraguay', o:[
+     {t:bd('paraguay'),ok:1,w:'Isso! Vermelha, branca e azul, com o escudo no meio.'},
+     {t:bd('chile'),w:'Esta é a de Chile: estrela branca no quadrado azul.'},
+     {t:bd('costarica'),w:'Esta é a de Costa Rica: faixa vermelha larga no meio.'},
+     {t:bd('peru'),w:'Esta é a de Perú: roja y blanca, em faixas de pé.'}]}
+  ]},
+
+{ id:'b7', emoji:'✍️', titulo:'Escrevendo os nomes do jeito certo', tema:'ñ, acentos e letras maiúsculas', pag:'lista da p. 70 e atividade 2 da p. 71', cor:'#ff5d8f',
+  html:`<p class="fala">Rabi: "Na prova de espanhol, a ESCRITA conta. Uma letrinha trocada e a resposta fica errada. Vamos treinar as mais traiçoeiras!"</p>
+<table class="quadro">
+<tr><th>❌ Jeito errado</th><th>✅ Jeito certo</th><th>💡 Dica</th></tr>
+<tr><td>Españo</td><td>${es('España')}</td><td>Tem <b>ñ</b> e termina em <b>a</b>: es-pa-ña.</td></tr>
+<tr><td>méxico · Méxica</td><td>${es('México')}</td><td>M maiúsculo, <b>x</b> e termina em <b>o</b>.</td></tr>
+<tr><td>El salvador</td><td>${es('El Salvador')}</td><td>Dois maiúsculos: <b>E</b> e <b>S</b>.</td></tr>
+<tr><td>Venesuela</td><td>${es('Venezuela')}</td><td>Com <b>z</b>: ve-ne-zue-la.</td></tr>
+<tr><td>Guinea Ecutorial</td><td>${es('Guinea Ecuatorial')}</td><td>e-cu-<b>a</b>-to-rial.</td></tr>
+<tr><td>Bolívia</td><td>${es('Bolivia')}</td><td>No livro de espanhol, <b>sem acento</b>.</td></tr>
+<tr><td>Cuidad</td><td>${es('Ciudad')}</td><td>C-<b>I</b>-<b>U</b>-dad.</td></tr>
+</table>
+<div class="regra">📌 <b>Com acento</b> (está assim no livro): ${es('México')}, ${es('Panamá')}, ${es('Perú')}, ${es('República Dominicana')} e as capitais ${es('Bogotá')}, ${es('San José')}, ${es('Asunción')}.<br>📌 <b>Com ñ</b>: ${es('España')}.<br>📌 Nome de país e de capital começa <b>sempre</b> com letra maiúscula.</div>`,
+  palavras:['ñ','acento','letra maiúscula','España','Bolivia','Venezuela'],
+  qs:[
+   {q:'Qual está escrita certa em espanhol?', fala:'España', o:[
+     {t:'España',ok:1,w:'Isso! Com ñ e terminando em a.'},
+     {t:'Españo',w:'Termina em a: España.'},
+     {t:'Espana',w:'Faltou o til do ñ: España.'},
+     {t:'españa',w:'Nome de país começa com maiúscula: España.'}]},
+   {q:'No livro de espanhol, como está escrito o nome deste país? ' + bd('bolivia','p'), fala:'Bolivia', o:[
+     {t:'Bolivia',ok:1,w:'Certo! Em espanhol, Bolivia não tem acento.'},
+     {t:'Bolívia',w:'Com acento no í é o jeito do português. No livro de espanhol está Bolivia.'},
+     {t:'Bolivía',w:'Não tem acento: Bolivia.'},
+     {t:'bolivia',w:'Começa com maiúscula: Bolivia.'}]},
+   {q:'Qual nome está escrito certo?', fala:'El Salvador', o:[
+     {t:'El Salvador',ok:1,w:'Perfeito! E maiúsculo e S maiúsculo.'},
+     {t:'El salvador',w:'Salvador também começa com maiúscula: El Salvador.'},
+     {t:'el Salvador',w:'El também começa com maiúscula: El Salvador.'},
+     {t:'El Salvadór',w:'Não tem acento: El Salvador.'}]}
+  ]},
+
+{ id:'b8', emoji:'💬', titulo:'A historieta da Frida', tema:'Lengua en acción: as palavras que dizem de onde a pessoa é', pag:'p. 72', cor:'#1fa2a8',
+  html:`<p class="fala">Rabi: "Na p. 72 tem uma historieta. Uma menina está com uma camiseta com o rosto de uma pintora famosa. Ouça os balões!"</p>
+<div class="balao"><span class="quem">👦</span><div>${es('¡Qué linda tu camiseta! ¿Quién es?')}<br><span class="sub">Que linda a sua camiseta! Quem é?</span></div></div>
+<div class="balao"><span class="quem">👧</span><div>${es('Es Frida Kahlo, una pintora mexicana.')}<br><span class="sub">É a Frida Kahlo, uma pintora mexicana.</span></div></div>
+<div class="balao"><span class="quem">👦</span><div>${es('¿En serio? ¿Esa es Frida? Yo pensaba que era española.')}<br><span class="sub">Sério? Essa é a Frida? Eu pensava que ela era espanhola.</span></div></div>
+<div class="balao"><span class="quem">👧</span><div>${es('No, ella es una de las más importantes artistas mexicanas.')}<br><span class="sub">Não, ela é uma das mais importantes artistas mexicanas.</span></div></div>
+<div class="regra">📌 As palavras destacadas no livro são ${es('mexicana')}, ${es('española')} e ${es('mexicanas')}. Elas dizem <b>de onde a pessoa é</b>.</div>
+<div class="caixa">🔎 Por que ${es('mexicanas')} com <b>-as</b>? Porque fala de <b>artistas</b> (várias) e de Frida, que é mulher: <b>feminino e plural</b>.</div>`,
+  palavras:['camiseta','pintora','mexicana','española','artistas mexicanas','¿Quién es?'],
+  qs:[
+   {q:'Na historieta, como a menina apresenta Frida Kahlo?', fala:'Es Frida Kahlo, una pintora mexicana.', o:[
+     {t:'una pintora mexicana',ok:1,w:'Isso! "Es Frida Kahlo, una pintora mexicana."'},
+     {t:'una pintora española',w:'Quem achava que ela era española era o menino. Ela é mexicana.'},
+     {t:'una escritora uruguaya',w:'O escritor uruguayo da p. 73 é Horacio Quiroga. Frida é pintora mexicana.'},
+     {t:'una jugadora cubana',w:'O jogador cubano da p. 73 é Leal. Frida é pintora mexicana.'}]},
+   {q:'O que o menino pensava sobre Frida?', fala:'Yo pensaba que era española.', o:[
+     {t:'Que ela era española',ok:1,w:'Certo! "Yo pensaba que era española." Mas ela é mexicana.'},
+     {t:'Que ela era mexicana',w:'Mexicana é o que ela É. O menino pensava que era española.'},
+     {t:'Que ela era argentina',w:'A historieta não fala em argentina. Ele pensava que era española.'},
+     {t:'Que ela era boliviana',w:'A historieta não fala em boliviana. Ele pensava que era española.'}]},
+   {q:'Por que o livro escreve "artistas mexicanas", com -as no fim?', fala:'las más importantes artistas mexicanas', o:[
+     {t:'Porque fala de artistas (plural) e de Frida, que é mulher (feminino)',ok:1,w:'Exato! Feminino + plural = mexicanas.'},
+     {t:'Porque é masculino e singular',w:'Masculino singular seria mexicano. Aqui é feminino plural.'},
+     {t:'Porque mexicana termina em consoante',w:'Mexicana termina em vogal (a). O -as mostra feminino plural.'},
+     {t:'Porque toda palavra em espanhol termina em -as',w:'Não! Há mexicano, mexicanos, español… O -as aqui é feminino plural.'}]}
+  ]},
+
+{ id:'b9', emoji:'🧩', titulo:'Masculino, feminino, singular e plural', tema:'A tabela da p. 72 e a atividade 2', pag:'p. 72', cor:'#7a5af8',
+  html:`<p class="fala">Rabi: "Agora a tabela mais importante da unidade. Ela mostra como a palavra muda para ele, ela, eles e elas."</p>
+<table class="quadro">
+<tr><th></th><th>Singular</th><th>Plural</th></tr>
+<tr><td colspan="3" style="text-align:center;background:#eef3ff"><b>Terminados en vocal</b> (terminam em vogal)</td></tr>
+<tr><td class="lado">Masculino</td><td>${es('Él es mexicano.')}</td><td>${es('Ellos son mexicanos.')}</td></tr>
+<tr><td class="lado">Femenino</td><td>${es('Ella es mexicana.')}</td><td>${es('Ellas son mexicanas.')}</td></tr>
+<tr><td colspan="3" style="text-align:center;background:#eef3ff"><b>Terminados en consonante</b> (terminam em consoante)</td></tr>
+<tr><td class="lado">Masculino</td><td>${es('Él es español.')}</td><td>${es('Ellos son españoles.')}</td></tr>
+<tr><td class="lado">Femenino</td><td>${es('Ella es española.')}</td><td>${es('Ellas son españolas.')}</td></tr>
+</table>
+<div class="regra">📌 <b>Terminou em vogal</b> (mexican<b>o</b>): feminino troca o <b>o</b> por <b>a</b>; plural ganha <b>s</b> → mexicano, mexicana, mexicanos, mexicanas.<br>📌 <b>Terminou em consoante</b> (españo<b>l</b>): feminino ganha <b>a</b>; plural masculino ganha <b>es</b>; plural feminino ganha <b>as</b> → español, española, españoles, españolas.</div>
+<div class="caixa">👥 ${es('Él')} = ele · ${es('Ella')} = ela · ${es('Ellos')} = eles · ${es('Ellas')} = elas · ${es('Nosotras')} = nós (só meninas)</div>
+<div class="exemplo">✅ Atividade 2 da p. 72:<br>a. ${es('Él es argentino.')}<br>b. ${es('Ellas son bolivianas.')}<br>c. ${es('Nosotras somos españolas.')}</div>`,
+  palavras:['masculino','femenino','singular','plural','vocal (vogal)','consonante (consoante)','Él / Ella / Ellos / Ellas / Nosotras'],
+  qs:[
+   {q:'Complete: "Ellos son ___."', fala:'Ellos son mexicanos.', o:[
+     {t:'mexicanos',ok:1,w:'Isso! Ellos = masculino plural.'},
+     {t:'mexicanas',w:'Mexicanas é para Ellas (feminino plural).'},
+     {t:'mexicano',w:'Mexicano é para Él (masculino singular).'},
+     {t:'mexicana',w:'Mexicana é para Ella (feminino singular).'}]},
+   {q:'Complete: "Ella es ___."', fala:'Ella es española.', o:[
+     {t:'española',ok:1,w:'Certo! Español termina em consoante: o feminino ganha a.'},
+     {t:'español',w:'Español é para Él (masculino).'},
+     {t:'españoles',w:'Españoles é para Ellos (masculino plural).'},
+     {t:'españolas',w:'Españolas é para Ellas ou Nosotras (feminino plural).'}]},
+   {q:'Complete como na atividade 2c: "Nosotras somos ___."', fala:'Nosotras somos españolas.', o:[
+     {t:'españolas',ok:1,w:'Exato! Nosotras = feminino plural.'},
+     {t:'español',w:'Español é masculino singular.'},
+     {t:'españoles',w:'Españoles é masculino plural. Nosotras são só meninas.'},
+     {t:'española',w:'Española é singular. Nosotras é plural.'}]}
+  ]},
+
+{ id:'b10', emoji:'🏷️', titulo:'La bandera cubana, el jugador cubano', tema:'Atividade 3: feminino e masculino com bandeiras e exemplos', pag:'p. 73', cor:'#e0743b',
+  html:`<p class="fala">Rabi: "Na p. 73 o livro faz duas colunas: Femenino e Masculino. Repare na palavra que vem antes!"</p>
+<table class="quadro">
+<tr><th>Femenino</th><th>Masculino</th></tr>
+<tr><td>${bd('cuba','p')} ${es('La bandera cubana')}</td><td>${es('Leal es un jugador cubano de voleibol.')}</td></tr>
+<tr><td>${bd('bolivia','p')} ${es('La bandera boliviana')}</td><td>${es('The Strongest es un equipo boliviano de fútbol.')}</td></tr>
+<tr><td>${bd('uruguay','p')} ${es('La bandera uruguaya')}</td><td>${es('El escritor uruguayo Horacio Quiroga escribió un libro de cuentos para niños llamado Cuentos de la selva.')}</td></tr>
+<tr><td>${bd('peru','p')} ${es('La bandera peruana')}</td><td>${es('El ceviche es un plato típico peruano.')}</td></tr>
+</table>
+<div class="regra">📌 ${es('La bandera')} é <b>feminina</b> → cuban<b>a</b>, bolivian<b>a</b>, uruguay<b>a</b>, peruan<b>a</b>.<br>📌 ${es('jugador')} (jogador), ${es('equipo')} (time), ${es('escritor')} e ${es('plato')} (prato) são <b>masculinos</b> → cuban<b>o</b>, bolivian<b>o</b>, uruguay<b>o</b>, peruan<b>o</b>.</div>
+<div class="caixa">🧠 Para lembrar: <b>Leal</b> → jogador cubano de vôlei · <b>The Strongest</b> → time boliviano de futebol · <b>Horacio Quiroga</b> → escritor uruguaio, livro <i>Cuentos de la selva</i> · <b>ceviche</b> → prato típico peruano.</div>`,
+  palavras:['jugador','equipo','escritor','plato típico','voleibol','fútbol','cuentos'],
+  qs:[
+   {q:'Complete: "The Strongest es un equipo ___ de fútbol."', fala:'The Strongest es un equipo boliviano de fútbol.', o:[
+     {t:'boliviano',ok:1,w:'Isso! Equipo é masculino: boliviano.'},
+     {t:'boliviana',w:'Boliviana combina com la bandera (feminino). Equipo é masculino.'},
+     {t:'uruguayo',w:'No livro, o uruguayo é o escritor. The Strongest é boliviano.'},
+     {t:'cubano',w:'No livro, o cubano é o jogador Leal. The Strongest é boliviano.'}]},
+   {q:'Complete: "El ceviche es un plato típico ___."', fala:'El ceviche es un plato típico peruano.', o:[
+     {t:'peruano',ok:1,w:'Certo! Plato é masculino: peruano.'},
+     {t:'peruana',w:'Peruana combina com la bandera. Plato é masculino: peruano.'},
+     {t:'cubano',w:'O ceviche, no livro, é prato típico peruano.'},
+     {t:'uruguayo',w:'O ceviche, no livro, é prato típico peruano.'}]},
+   {q:'Quem é Horacio Quiroga, segundo a p. 73?', fala:'El escritor uruguayo Horacio Quiroga', o:[
+     {t:'Um escritor uruguaio, que escreveu um livro de contos para crianças chamado Cuentos de la selva',ok:1,w:'Exato!'},
+     {t:'Um jogador cubano de voleibol',w:'O jogador cubano de voleibol é Leal.'},
+     {t:'Um pintor mexicano',w:'A artista mexicana da p. 72 é Frida Kahlo, uma pintora.'},
+     {t:'Um time boliviano de futebol',w:'O time boliviano é The Strongest.'}]}
+  ]},
+
+{ id:'b11', emoji:'🏁', titulo:'Revisão geral', tema:'Mistura de tudo', pag:'p. 68 a 73', cor:'#5b6bd6',
+  html:`<p class="fala">Rabi: "Última pipa! Agora misturamos tudo para ver se você está voando alto. ¡Vamos!"</p>
+<div class="caixa">🗺️ Mapa (21 países, bandeira e capital) · 🏙️ Ciudad de… · ⛪ San/Santo · ✍️ ñ, acentos e maiúsculas · 💬 Frida, pintora mexicana · 🧩 mexicano/mexicana/mexicanos/mexicanas e español/española/españoles/españolas · 🏷️ la bandera cubana × el jugador cubano</div>`,
+  palavras:['capital','bandera','masculino','femenino','singular','plural'],
+  qs:[
+   {q:'Qual par país – capital está ERRADO?', fala:'Ecuador, Quito', o:[
+     {t:'Ecuador – Caracas',ok:1,w:'Este é o errado! A capital de Ecuador é Quito; Caracas é de Venezuela.'},
+     {t:'Perú – Lima',w:'Este par está certo. O errado é Ecuador – Caracas.'},
+     {t:'Chile – Santiago',w:'Este par está certo. O errado é Ecuador – Caracas.'},
+     {t:'España – Madrid',w:'Este par está certo. O errado é Ecuador – Caracas.'}]},
+   {q:'Complete: "Leal es un jugador ___ de voleibol."', fala:'Leal es un jugador cubano de voleibol.', o:[
+     {t:'cubano',ok:1,w:'Isso! Jugador é masculino: cubano.'},
+     {t:'cubana',w:'Cubana combina com la bandera. Jugador é masculino: cubano.'},
+     {t:'peruano',w:'No livro, Leal é cubano.'},
+     {t:'uruguayo',w:'No livro, Leal é cubano. O uruguayo é o escritor Horacio Quiroga.'}]},
+   {q:'Qual palavra está escrita certa?', fala:'Venezuela', o:[
+     {t:'Venezuela',ok:1,w:'Perfeito: ve-ne-zue-la, com z.'},
+     {t:'Venesuela',w:'É com z: Venezuela.'},
+     {t:'Benezuela',w:'Começa com V: Venezuela.'},
+     {t:'Venezuéla',w:'Não tem acento: Venezuela.'}]}
+  ]}
+];
+
+// ----- Mapa Mental para encaixar (11 lacunas; a errada vem de outro ramo) -----
+const RAMOS = [
+ {nome:'🗺️ O mapa (p. 68–69)', cor:'#3a8fd6', nos:[
+   ['Tipo de texto da imagem da abertura: ', {id:'L1',certa:'un mapa',errada:'la bandera'}, '.'],
+   'Para cada país: nome, bandeira e capital. São 21 países.',
+   'Na p. 69, na outra ponta do mapa: España e Guinea Ecuatorial.']},
+ {nome:'🏙️ Capitais "Ciudad de…"', cor:'#ff8a3d', nos:[
+   'México → Ciudad de México · Panamá → Ciudad de Panamá',
+   ['Guatemala → ', {id:'L2',certa:'Ciudad de Guatemala',errada:'San Salvador'}],
+   'Grafia: C-I-U-D-A-D (nunca "Cuidad").']},
+ {nome:'⛪ Capitais San / Santo', cor:'#8e5bd0', nos:[
+   ['Costa Rica → ', {id:'L3',certa:'San José',errada:'La Habana'}],
+   ['República Dominicana → ', {id:'L4',certa:'Santo Domingo',errada:'Ciudad de Panamá'}],
+   'El Salvador → San Salvador · Puerto Rico → San Juan · Chile → Santiago']},
+ {nome:'🌎 Outras capitais', cor:'#24a36b', nos:[
+   ['Cuba → ', {id:'L5',certa:'La Habana',errada:'Santiago'}],
+   'Honduras → Tegucigalpa · Nicaragua → Managua · Venezuela → Caracas · Colombia → Bogotá · Ecuador → Quito',
+   ['Guinea Ecuatorial → ', {id:'L6',certa:'Malabo',errada:'Ciudad de México'}],
+   'Perú → Lima · Bolivia → Sucre · Paraguay → Asunción · Argentina → Buenos Aires · Uruguay → Montevideo · España → Madrid']},
+ {nome:'🏳️ Bandeiras (p. 70, 71 e 73)', cor:'#e2483d', nos:[
+   ['Bandeira com triângulo e estrela (rojo, azul y blanco): ', {id:'L7',certa:'Cuba',errada:'Guatemala'}],
+   'Boliviana: rojo, amarillo y verde · Uruguaya: azul y blanco + sol · Peruana: roja y blanca',
+   'Não deixe em branco a do Paraguay!']},
+ {nome:'✍️ Escrever certo', cor:'#ff5d8f', nos:[
+   ['España, separando as sílabas: es-pa-', {id:'L8',certa:'ña',errada:'ño'}, ' (com ñ e terminando em a).'],
+   ['Em espanhol, Bolivia se escreve ', {id:'L9',certa:'sem acento',errada:'com ñ'}, '.'],
+   'México, El Salvador, Venezuela, Guinea Ecuatorial: maiúsculas e letras no lugar certo.']},
+ {nome:'🗣️ Masculino e feminino (p. 72–73)', cor:'#7a5af8', nos:[
+   ['Frida Kahlo: una pintora ', {id:'L10',certa:'mexicana',errada:'española'}, '.'],
+   'Él es español · Ella es española · Ellos son españoles · Ellas son españolas',
+   ['El ceviche es un plato típico ', {id:'L11',certa:'peruano',errada:'peruana'}, '.']]}
+];
+
+// ----- Verdadeiro ou Falso (banco de 32; sorteia 12) -----
+const VF = [
+ {f:'A Unidade 8 do livro se chama "El mundo hispanohablante".', v:1, e:'Verdadeiro. É o título da unidade, na p. 68.'},
+ {f:'No mapa da abertura, cada país aparece com o nome, a bandeira e a capital.', v:1, e:'Verdadeiro. São as 3 informações de cada país.'},
+ {f:'Na p. 69, a resposta para "¿Qué tipo de texto aparece en la imagen?" é "una noticia".', v:0, e:'Falso. A resposta é "un mapa".'},
+ {f:'A lista de nomes de países da p. 70 tem 21 países.', v:1, e:'Verdadeiro. São 21 nomes.'},
+ {f:'A capital de Guatemala é San Salvador.', v:0, e:'Falso. É Ciudad de Guatemala. San Salvador é a capital de El Salvador.'},
+ {f:'O jeito certo de escrever é "Cuidad de México".', v:0, e:'Falso. O certo é Ciudad (C-I-U-D-A-D) de México.'},
+ {f:'A capital de Panamá é Ciudad de Panamá.', v:1, e:'Verdadeiro. É um dos 3 países do truque "Ciudad de…".'},
+ {f:'San José é a capital de Costa Rica.', v:1, e:'Verdadeiro.'},
+ {f:'A capital de Puerto Rico é Santo Domingo.', v:0, e:'Falso. É San Juan. Santo Domingo é a capital de República Dominicana.'},
+ {f:'Santiago é a capital de Chile.', v:1, e:'Verdadeiro.'},
+ {f:'La Habana é a capital de Cuba.', v:1, e:'Verdadeiro.'},
+ {f:'Caracas é a capital de Ecuador.', v:0, e:'Falso. A capital de Ecuador é Quito. Caracas é de Venezuela.'},
+ {f:'A capital de Colombia é Bogotá, com acento no último a.', v:1, e:'Verdadeiro.'},
+ {f:'Lima é a capital de Perú.', v:1, e:'Verdadeiro.'},
+ {f:'A capital de Bolivia é Asunción.', v:0, e:'Falso. A capital de Bolivia é Sucre. Asunción é de Paraguay.'},
+ {f:'Montevideo é a capital de Uruguay.', v:1, e:'Verdadeiro.'},
+ {f:'Buenos Aires é a capital de Argentina.', v:1, e:'Verdadeiro.'},
+ {f:'Malabo é a capital de Guinea Ecuatorial.', v:1, e:'Verdadeiro. Ela aparece na p. 69, junto com España.'},
+ {f:'Tegucigalpa é a capital de Nicaragua.', v:0, e:'Falso. Tegucigalpa é de Honduras. A capital de Nicaragua é Managua.'},
+ {f:'Em espanhol, o nome do país se escreve "Españo".', v:0, e:'Falso. Escreve-se España, com ñ e terminando em a.'},
+ {f:'No livro de espanhol, Bolivia é escrita com acento: "Bolívia".', v:0, e:'Falso. Em espanhol é Bolivia, sem acento.'},
+ {f:'No nome El Salvador, o S de Salvador é maiúsculo.', v:1, e:'Verdadeiro. El Salvador: E e S maiúsculos.'},
+ {f:'"La bandera uruguaya tiene dos colores: azul y blanco" e tem um sol na parte superior izquierda.', v:1, e:'Verdadeiro. É a descrição da p. 73.'},
+ {f:'"La bandera peruana tiene tres colores: rojo, amarillo y verde."', v:0, e:'Falso. A peruana es roja y blanca. Rojo, amarillo y verde é a boliviana.'},
+ {f:'Na historieta da p. 72, Frida Kahlo é apresentada como una pintora española.', v:0, e:'Falso. Ela é una pintora mexicana. O menino é que pensava que ela era española.'},
+ {f:'"Ellas son mexicanas." está de acordo com a tabela da p. 72.', v:1, e:'Verdadeiro. Ellas = feminino plural = mexicanas.'},
+ {f:'O plural masculino de "español" é "españoles".', v:1, e:'Verdadeiro. Terminou em consoante: plural masculino ganha -es.'},
+ {f:'"Nosotras somos español." está correto.', v:0, e:'Falso. Nosotras é feminino plural: Nosotras somos españolas.'},
+ {f:'"The Strongest es un equipo boliviano de fútbol."', v:1, e:'Verdadeiro. É a frase da p. 73.'},
+ {f:'Horacio Quiroga é um jogador cubano de voleibol.', v:0, e:'Falso. Ele é um escritor uruguayo (Cuentos de la selva). O jogador cubano é Leal.'},
+ {f:'"Él es argentina." está correto.', v:0, e:'Falso. Él é masculino: Él es argentino.'},
+ {f:'Venezuela se escreve com z.', v:1, e:'Verdadeiro. Ve-ne-zue-la.'}
+];
+
+const RELAMPAGO = [
+ ['Quais são as 3 capitais "Ciudad de…"?', 'Ciudad de México, Ciudad de Guatemala e Ciudad de Panamá.'],
+ ['Como se escreve "cidade" em espanhol?', 'Ciudad: C-I-U-D-A-D.'],
+ ['Qual é a capital de El Salvador?', 'San Salvador (o país é El Salvador).'],
+ ['Santo Domingo, San Juan e San José são capitais de quais países?', 'República Dominicana, Puerto Rico e Costa Rica.'],
+ ['Quais países aparecem na p. 69, na outra ponta do mapa?', 'España (Madrid) e Guinea Ecuatorial (Malabo).'],
+ ['Sucre, Asunción e Montevideo: de quem são?', 'Bolivia, Paraguay e Uruguay.'],
+ ['Quais são as cores da bandera cubana?', 'Rojo, azul y blanco; dentro do triângulo hay una estrella.'],
+ ['Qual bandeira tem um sol na parte superior izquierda?', 'La bandera uruguaya (azul y blanco).'],
+ ['Como Frida Kahlo é apresentada na historieta?', 'Es Frida Kahlo, una pintora mexicana.'],
+ ['Ellos son… / Ellas son… (español)?', 'Ellos son españoles. Ellas son españolas.'],
+ ['Por que "la bandera cubana" mas "el jugador cubano"?', 'Bandera é feminina (cubana); jugador é masculino (cubano).'],
+ ['Quais nomes têm ñ ou acento e costumam cair?', 'España (ñ); México, Panamá, Perú; Bogotá, San José, Asunción. Bolivia não tem acento.']
+];
+
+// ----- Simulado (25 questões; a 1ª alternativa listada é a certa, depois são embaralhadas) -----
+const SIM = [
+ {q:'Qual é a capital de México?', fala:'Ciudad de México', o:[['Ciudad de México',1,'É um dos 3 países do truque "Ciudad de…".'],['Tegucigalpa','Tegucigalpa é a capital de Honduras.'],['Managua','Managua é a capital de Nicaragua.'],['Santiago','Santiago é a capital de Chile.']]},
+ {q:'Santo Domingo é a capital de qual país?', fala:'Santo Domingo, República Dominicana', o:[['República Dominicana',1,'Isso: República Dominicana → Santo Domingo.'],['Puerto Rico','A capital de Puerto Rico é San Juan.'],['Cuba','A capital de Cuba é La Habana.'],['Panamá','A capital de Panamá é Ciudad de Panamá.']]},
+ {q:'Qual é a capital de Venezuela?', fala:'Caracas', o:[['Caracas',1,'Venezuela → Caracas.'],['Quito','Quito é a capital de Ecuador.'],['Bogotá','Bogotá é a capital de Colombia.'],['Lima','Lima é a capital de Perú.']]},
+ {q:'Asunción é a capital de qual país?', fala:'Asunción, Paraguay', o:[['Paraguay',1,'Paraguay → Asunción.'],['Uruguay','A capital de Uruguay é Montevideo.'],['Argentina','A capital de Argentina é Buenos Aires.'],['Bolivia','A capital de Bolivia é Sucre.']]},
+ {q:'Qual é a capital de Honduras?', fala:'Tegucigalpa', o:[['Tegucigalpa',1,'Honduras → Tegucigalpa.'],['Managua','Managua é a capital de Nicaragua.'],['San Salvador','San Salvador é a capital de El Salvador.'],['Ciudad de Guatemala','É a capital de Guatemala.']]},
+ {q:'Qual nome de capital está escrito corretamente?', fala:'Ciudad de Guatemala', o:[['Ciudad de Guatemala',1,'Ciudad: C-I-U-D-A-D.'],['Cuidad de Guatemala','Trocou a ordem do i e do u. O certo é Ciudad.'],['Ciudad de Guatemela','O país é Guatemala, com a: gua-te-ma-la.'],['Ciudá de Guatemala','Falta o d final: Ciudad.']]},
+ {q:'Esta bandeira é de qual país? ' + bd('paraguay','g'), fala:'Paraguay', o:[['Paraguay',1,'Vermelha, branca e azul, com o escudo no meio. É a do Paraguay.'],['Perú','A peruana é roja y blanca, em faixas de pé.'],['Chile','A de Chile tem uma estrela branca no quadrado azul.'],['Costa Rica','A de Costa Rica tem uma faixa vermelha larga no meio, entre faixas brancas e azuis.']]},
+ {q:'Complete com a descrição da p. 73: "La bandera cubana tiene tres colores: ___. Dentro del triángulo hay una estrella."', fala:'La bandera cubana tiene tres colores: rojo, azul y blanco.', o:[['rojo, azul y blanco',1,'Vermelho, azul e branco.'],['rojo, amarillo y verde','Essas são as cores da bandera boliviana.'],['azul y blanco','Essas são as cores da bandera uruguaya.'],['roja y blanca','Essa é a bandera peruana.']]},
+ {q:'Na historieta da p. 72, quem está na camiseta da menina?', fala:'Es Frida Kahlo, una pintora mexicana.', o:[['Frida Kahlo, una pintora mexicana',1,'"Es Frida Kahlo, una pintora mexicana."'],['Frida Kahlo, una pintora española','O menino pensava que era española, mas ela é mexicana.'],['Una jugadora cubana de voleibol','O jogador cubano de voleibol, na p. 73, é Leal.'],['Una escritora uruguaya','O escritor uruguayo, na p. 73, é Horacio Quiroga.']]},
+ {q:'Complete como na atividade 2a da p. 72: "Él es ___."', fala:'Él es argentino.', o:[['argentino',1,'Él = masculino singular: argentino.'],['argentina','Argentina (a nacionalidade) é para Ella.'],['bolivianas','Bolivianas é para Ellas (feminino plural).'],['españolas','Españolas é para Ellas ou Nosotras (feminino plural).']]},
+ {q:'Em qual alternativa TODAS as capitais começam com "San" ou "Santo"?', fala:'San José, San Juan, Santo Domingo', o:[['San José, San Juan e Santo Domingo',1,'As três começam com San ou Santo.'],['San Salvador, Sucre e Santo Domingo','Sucre (Bolivia) não começa com San.'],['La Habana, San Juan e Lima','La Habana e Lima não começam com San.'],['Quito, San José e Malabo','Quito e Malabo não começam com San.']]},
+ {q:'Atenção à pegadinha: no país El Salvador, a capital é…', fala:'San Salvador', o:[['San Salvador',1,'País: El Salvador. Capital: San Salvador.'],['El Salvador','El Salvador é o nome do país, não da capital.'],['Santo Domingo','Santo Domingo é a capital de República Dominicana.'],['Santiago','Santiago é a capital de Chile.']]},
+ {q:'Qual alternativa liga corretamente os três países às capitais?', fala:'Chile, Santiago. Perú, Lima. Ecuador, Quito.', o:[['Chile – Santiago; Perú – Lima; Ecuador – Quito',1,'Os três pares estão certos.'],['Chile – Lima; Perú – Quito; Ecuador – Santiago','As capitais estão trocadas entre os países.'],['Chile – Santiago; Perú – Sucre; Ecuador – Caracas','Sucre é de Bolivia e Caracas é de Venezuela.'],['Chile – Quito; Perú – Lima; Ecuador – Santiago','Quito é de Ecuador e Santiago é de Chile.']]},
+ {q:'No mapa da abertura, dois países aparecem na p. 69, na outra ponta do mapa. Quais são as capitais deles?', fala:'Madrid y Malabo', o:[['Madrid e Malabo',1,'España → Madrid; Guinea Ecuatorial → Malabo.'],['Lima e Quito','Lima (Perú) e Quito (Ecuador) estão na p. 68.'],['Caracas e Bogotá','Caracas (Venezuela) e Bogotá (Colombia) estão na p. 68.'],['Managua e San José','Managua (Nicaragua) e San José (Costa Rica) estão na p. 68.']]},
+ {q:'Em qual alternativa os três nomes estão escritos corretamente em espanhol?', fala:'España, México y Bolivia', o:[['España, México e Bolivia',1,'Com ñ, M maiúsculo com x e Bolivia sem acento.'],['Españo, México e Bolivia','O certo é España, terminando em a.'],['España, méxico e Bolívia','México começa com maiúscula, e Bolivia não tem acento em espanhol.'],['España, Méxica e Bolivia','O país é México, terminando em o.']]},
+ {q:'Qual nome de país está escrito corretamente?', fala:'Guinea Ecuatorial', o:[['Guinea Ecuatorial',1,'E-cu-a-to-rial.'],['Guinea Ecutorial','Faltou o a: Ecuatorial.'],['Guinea Equatorial','Em espanhol é com c: Ecuatorial.'],['Guinea ecuatorial','Ecuatorial também começa com maiúscula no nome do país.']]},
+ {q:'De acordo com a tabela da p. 72, complete: "Ellas son ___."', fala:'Ellas son mexicanas.', o:[['mexicanas',1,'Ellas = feminino plural.'],['mexicanos','Mexicanos é para Ellos (masculino plural).'],['mexicana','Mexicana é para Ella (singular).'],['mexicano','Mexicano é para Él (masculino singular).']]},
+ {q:'De acordo com a tabela da p. 72, complete: "Ellos son ___."', fala:'Ellos son españoles.', o:[['españoles',1,'Español termina em consoante: o plural masculino ganha -es.'],['españolas','Españolas é para Ellas (feminino plural).'],['española','Española é para Ella (feminino singular).'],['español','Español é para Él (singular).']]},
+ {q:'Qual frase está de acordo com a tabela da p. 72?', fala:'Ella es española.', o:[['Ella es española.',1,'Ella = feminino singular = española.'],['Ella es español.','Español é masculino. Para Ella: española.'],['Ellos son españolas.','Ellos é masculino: Ellos son españoles.'],['Él es españoles.','Él é singular: Él es español.']]},
+ {q:'Complete a descrição da p. 73: "La bandera ___ tiene dos colores: azul y blanco. En la parte superior izquierda hay un sol."', fala:'La bandera uruguaya tiene dos colores: azul y blanco.', o:[['uruguaya',1,'É a bandeira do Uruguay, e bandera é feminina: uruguaya.'],['uruguayo','Bandera é feminina: uruguaya, com a.'],['peruana','A peruana es roja y blanca, sem sol.'],['boliviana','A boliviana tem rojo, amarillo y verde.']]},
+ {q:'Complete a frase da p. 73: "El escritor ___ Horacio Quiroga escribió un libro de cuentos para niños llamado Cuentos de la selva."', fala:'El escritor uruguayo Horacio Quiroga', o:[['uruguayo',1,'Escritor é masculino: uruguayo.'],['uruguaya','Uruguaya combina com la bandera. Escritor é masculino.'],['cubano','No livro, cubano é o jogador Leal.'],['boliviano','No livro, boliviano é o time The Strongest.']]},
+ {q:'Por que o livro escreve "La bandera peruana", mas "El ceviche es un plato típico peruano"?', fala:'La bandera peruana. Un plato típico peruano.', o:[['Porque bandera é uma palavra feminina e plato é masculina',1,'Feminino → peruana; masculino → peruano.'],['Porque bandera está no plural','Bandera está no singular. A diferença é feminino × masculino.'],['Porque "peruano" só se usa para comidas','Não: jugador, equipo e escritor também usam -o. É por serem masculinos.'],['Porque ceviche termina em consoante','Ceviche termina em vogal. A diferença é que plato é masculino.']]},
+ {q:'Na tabela da p. 72, a palavra "español" está no grupo dos…', fala:'Él es español. Ellos son españoles.', o:[['terminados em consoante, e o plural masculino é "españoles"',1,'Español termina em l (consoante): españoles.'],['terminados em vogal, e o plural masculino é "españolos"','Español termina em consoante, e "españolos" não existe na tabela.'],['terminados em consoante, e o plural masculino é "españols"','O plural ganha -es: españoles.'],['terminados em vogal, e o plural masculino é "españoles"','O plural está certo, mas español termina em consoante (l).']]},
+ {q:'Qual afirmação sobre a historieta da p. 72 está correta?', fala:'Yo pensaba que era española.', o:[['Um menino pensava que Frida era espanhola, mas a menina explica que ela é mexicana',1,'"Yo pensaba que era española." / "No, ella es una de las más importantes artistas mexicanas."'],['A menina pensava que Frida era espanhola','Quem pensava isso era o menino.'],['Frida era uma jogadora de voleibol','Frida é pintora. O jogador de voleibol (p. 73) é Leal.'],['Frida era uma escritora uruguaia','Frida é pintora mexicana. O escritor uruguayo é Horacio Quiroga.']]},
+ {q:'Qual par país – capital está ERRADO?', fala:'Bolivia, Sucre', o:[['Bolivia – Lima',1,'Este é o errado: a capital de Bolivia é Sucre; Lima é de Perú.'],['Uruguay – Montevideo','Este par está certo.'],['Argentina – Buenos Aires','Este par está certo.'],['Cuba – La Habana','Este par está certo.']]}
+];
+
+// ===================== LÓGICA =====================
+const SLUG = 'esp5pipas';
+const SEED_LEIT = 19, SEED_SIM = 78, SEED_MAPA = 13;
+const K = { leitura:SLUG+'_leitura_v1', mapa:SLUG+'_mapa_v1', vf:SLUG+'_vf_v1', resumo:SLUG+'_resumo_v1', simulado:SLUG+'_simulado_v1', trilha:SLUG+'_trilha_v1' };
+const CODIGO_PAIS = 'PAIS-77';
+const MEM = {};
+function ler(k){ try{ const v = localStorage.getItem(k); if(v!==null) return JSON.parse(v); }catch(e){} return MEM[k] ? JSON.parse(MEM[k]) : null; }
+function gravar(k,o){ const s = JSON.stringify(o); MEM[k] = s; try{ localStorage.setItem(k,s); }catch(e){} }
+function apagar(k){ delete MEM[k]; try{ localStorage.removeItem(k); }catch(e){} }
+
+// ---------- áudio (espanhol) ----------
+let vozES = null;
+function escolherVoz(){ try{ const vs = speechSynthesis.getVoices(); vozES = vs.find(v=>v.lang==='es-ES') || vs.find(v=>/^es/i.test(v.lang)) || null; }catch(e){} }
+try{ escolherVoz(); speechSynthesis.onvoiceschanged = escolherVoz; }catch(e){}
+function falar(t){
+  try{ speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'es-ES'; u.rate = 1; if(vozES) u.voice = vozES; speechSynthesis.speak(u); }
+  catch(e){ abrirModal('<h2>🔇 Áudio indisponível</h2><p>Este navegador não tem voz para ler em espanhol. Tente no Chrome ou no Safari.</p>'); }
+}
+document.addEventListener('click', e=>{ const b = e.target.closest('[data-fala]'); if(b){ e.preventDefault(); e.stopPropagation(); falar(b.dataset.fala); } }, true);
+function somBt(t){ return t ? ` <button class="som" data-fala="${esc(t)}" title="Ouvir em espanhol">🔊</button>` : ''; }
+
+let S = {};
+function carregar(){
+  S.leitura  = ler(K.leitura)  || {resp:{}, concluido:false};
+  S.mapa     = ler(K.mapa)     || {pecas:{}, concluido:false};
+  S.vf       = ler(K.vf)       || {melhor:null, rodadas:0, historico:[], concluido:false};
+  S.resumo   = ler(K.resumo)   || {maxRolagem:0, concluido:false};
+  S.simulado = ler(K.simulado) || {resp:{}, enviado:false, concluido:false};
+  S.trilha   = ler(K.trilha)   || {liberadoPelosPais:false, liberadoEm:null, vistos:{}, historico:[]};
+  if(!S.trilha.vistos) S.trilha.vistos = {};
+  if(!S.trilha.historico) S.trilha.historico = [];
+}
+function salvar(nome){ S[nome].salvoEm = new Date().toISOString(); gravar(K[nome], S[nome]); atualizarPainel(); renderTrilha(); }
+function concluir(nome){ if(!S[nome].concluido){ S[nome].concluido = true; S[nome].concluidoEm = new Date().toISOString(); } }
+
+// ---------- utilidades ----------
+function hashStr(s){ let h = 2166136261; for(let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h,16777619); } return h>>>0; }
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function embaralhar(arr, seed){ const r = mulberry32(seed); const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function dataBR(iso){ if(!iso) return '—'; const d=new Date(iso); const p=n=>String(n).padStart(2,'0'); return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`; }
+const $ = id => document.getElementById(id);
+const LETRAS = ['a','b','c','d'];
+
+// ---------- modal ----------
+function abrirModal(html, botoes){
+  const m = $('modal'); m.innerHTML = html + '<div style="margin-top:14px" id="modalBts"></div>';
+  (botoes||[{t:'OK', cls:'btn'}]).forEach(b=>{ const el=document.createElement('button'); el.className=b.cls||'btn'; el.textContent=b.t; el.onclick=()=>{ fecharModal(); if(b.fn) b.fn(); }; $('modalBts').appendChild(el); });
+  $('fundoModal').classList.add('aberto');
+}
+function fecharModal(){ $('fundoModal').classList.remove('aberto'); }
+
+// ---------- trilha ----------
+const ETAPAS = [
+  {id:'leitura', nome:'Leitura Guiada', ic:'📖'},
+  {id:'mapa', nome:'Mapa Mental para encaixar', ic:'🧠'},
+  {id:'vf', nome:'Verdadeiro ou Falso', ic:'✅'},
+  {id:'resumo', nome:'Resumo', ic:'🗺️'},
+  {id:'simulado', nome:'Simulado', ic:'📝'}
+];
+const idxEtapa = id => ETAPAS.findIndex(e=>e.id===id);
+function feito(id){ return !!(S[id] && S[id].concluido); }
+function aberta(i){ if(i<=0) return true; if(S.trilha.liberadoPelosPais) return true; return feito(ETAPAS[i-1].id) || feito(ETAPAS[i].id); }
+const TOTAL_PERG = BLOCOS.reduce((s,b)=>s+b.qs.length,0);
+function blocoFeito(b){ return b.qs.every((q,qi)=>S.leitura.resp[b.id+'_'+qi]); }
+function blocosFeitos(){ return BLOCOS.filter(blocoFeito).length; }
+const PECAS = []; RAMOS.forEach(r=>r.nos.forEach(n=>{ if(Array.isArray(n)) n.forEach(p=>{ if(typeof p==='object') PECAS.push(p); }); }));
+const TOTAL_PECAS = PECAS.length;
+function pecasFeitas(){ return PECAS.filter(p=>S.mapa.pecas[p.id] && S.mapa.pecas[p.id].feita).length; }
+function faltaTexto(i){
+  const ant = ETAPAS[i-1].id;
+  if(ant==='leitura') return `Destrava quando você concluir as ${BLOCOS.length} pipas da Leitura Guiada (faltam ${BLOCOS.length-blocosFeitos()}).`;
+  if(ant==='mapa') return `Destrava quando você encaixar as ${TOTAL_PECAS} peças do Mapa Mental (faltam ${TOTAL_PECAS-pecasFeitas()}).`;
+  if(ant==='vf') return 'Destrava quando você jogar uma rodada completa (12 frases) do Verdadeiro ou Falso.';
+  if(ant==='resumo') return 'Destrava quando você ler o Resumo até o fim e clicar em "✅ Li o resumo até o fim".';
+  return '';
+}
+function ehNova(i){ return i>0 && aberta(i) && !feito(ETAPAS[i].id) && !S.trilha.vistos[ETAPAS[i].id]; }
+
+let abaAtual = 'inicio';
+function renderAbas(){
+  const nav = $('abas'); nav.innerHTML = '';
+  const todas = [{id:'inicio', nome:'Início', ic:'🏠'}].concat(ETAPAS);
+  todas.forEach(a=>{
+    const i = idxEtapa(a.id); const b = document.createElement('button');
+    b.innerHTML = `${a.ic} ${a.nome}`; b.dataset.aba = a.id;
+    if(a.id===abaAtual) b.classList.add('ativa');
+    if(i>=0 && !aberta(i)){ b.classList.add('trancada'); b.innerHTML = `🔒 ${a.nome}`; b.title = faltaTexto(i); }
+    else if(i>=0 && feito(a.id)) b.innerHTML += ' <span class="selo">✅</span>';
+    else if(i>=0 && ehNova(i)) b.innerHTML += ' <span class="selo">✨ Novo</span>';
+    b.onclick = ()=>ir(a.id);
+    nav.appendChild(b);
+  });
+}
+function renderTrilha(){
+  const box = $('trilhaCards'); if(!box) return; box.innerHTML = '';
+  if(S.trilha.liberadoPelosPais){ const s=document.createElement('div'); s.className='caixa'; s.innerHTML='🔓 <b>Trilha liberada pelos pais</b> em '+dataBR(S.trilha.liberadoEm); box.appendChild(s); }
+  ETAPAS.forEach((e,i)=>{
+    const b = document.createElement('button'); b.className='etapa'; b.dataset.etapa = e.id;
+    let status;
+    if(!aberta(i)){ b.classList.add('trancada'); status = `<span class="tag lock">🔒 Trancado</span><div class="sub">${faltaTexto(i)}</div>`; }
+    else if(feito(e.id)){ b.classList.add('feita'); status = `<span class="tag ok">✅ Concluído</span><div class="sub">em ${dataBR(S[e.id].concluidoEm)}</div>`; }
+    else if(ehNova(i)){ b.classList.add('nova'); status = `<span class="tag novo">✨ Novo destravado</span>`; }
+    else status = `<span class="sub">${i===0?'Comece por aqui!':'Aberto'}</span>`;
+    b.innerHTML = `<span class="ic">${e.ic}</span><span><b>${i+1}. ${e.nome}</b> ${status}</span>`;
+    b.onclick = ()=>ir(e.id);
+    box.appendChild(b);
+  });
+  renderAbas(); renderProximos();
+}
+function renderProximos(){
+  document.querySelectorAll('[data-proximo]').forEach(bt=>{
+    const i = idxEtapa(bt.dataset.proximo);
+    const ok = aberta(i);
+    bt.disabled = !ok;
+    if(!bt.dataset.rotulo) bt.dataset.rotulo = bt.textContent;
+    bt.textContent = ok ? bt.dataset.rotulo : '🔒 ' + bt.dataset.rotulo.replace(/^\S+\s/,'');
+    bt.title = ok ? '' : faltaTexto(i);
+    bt.onclick = ()=>ir(bt.dataset.proximo);
+  });
+}
+function modalTrancada(i){
+  abrirModal(`<div class="trofeu">🔒</div><h2>Esta etapa ainda está trancada</h2><p>Para abrir <b>${ETAPAS[i].nome}</b>, conclua antes <b>${ETAPAS[i-1].nome}</b>.</p><p>${faltaTexto(i)}</p>`,
+    [{t:'Ir para '+ETAPAS[i-1].nome, cls:'btn', fn:()=>ir(ETAPAS[i-1].id)},{t:'Voltar ao início', cls:'btn claro', fn:()=>ir('inicio')}]);
+}
+function ir(id){
+  const i = idxEtapa(id);
+  if(id!=='inicio' && i<0) id='inicio';
+  if(i>=0 && !aberta(i)){ modalTrancada(i); return; }
+  abaAtual = id;
+  document.querySelectorAll('section.aba').forEach(s=>s.classList.toggle('ativa', s.id==='sec-'+id));
+  if(i>=0 && !S.trilha.vistos[id]){ S.trilha.vistos[id] = new Date().toISOString(); gravar(K.trilha, S.trilha); }
+  renderTrilha();
+  window.scrollTo(0,0);
+  if(id==='resumo') setTimeout(medirRolagem, 300);
+}
+
+// ---------- LEITURA ----------
+const fechados = {};
+function opcoesDe(q, seed){ return embaralhar(q.o.map((o,k)=>Object.assign({k}, o)), seed); }
+function renderLeitura(){
+  const box = $('blocosLeitura'); box.innerHTML = '';
+  let anteriorFeito = true;
+  BLOCOS.forEach((b,j)=>{
+    const liberado = anteriorFeito; const completo = blocoFeito(b);
+    const d = document.createElement('div');
+    d.className = 'card bloco' + (liberado?'':' trancado') + (fechados[b.id]?' fechado':'');
+    d.style.setProperty('--c', b.cor); d.id = 'bloco-'+b.id;
+    let cab = `<div class="cab"><div><h2 style="color:${b.cor}">🪁 ${j+1}. ${b.emoji} ${b.titulo}</h2><div class="sub">${b.tema} · ${b.pag}</div></div><div>${completo?'<span class="tag ok">✅ feita</span>':(liberado?'':'<span class="tag lock">🔒</span>')}</div></div>`;
+    if(!liberado){ d.innerHTML = cab + `<p class="sub">🔒 Abre quando você responder as perguntas da pipa ${j}.</p>`; box.appendChild(d); anteriorFeito=false; return; }
+    let corpo = `<div class="corpo">${b.html}<div class="caixa">🔑 <b>Palavras importantes:</b> ${b.palavras.join(' · ')}</div><h3>🎯 Responda as ${b.qs.length} perguntas</h3>`;
+    b.qs.forEach((q,qi)=>{
+      const qid = b.id+'_'+qi; const r = S.leitura.resp[qid];
+      const ops = opcoesDe(q, hashStr(qid)+SEED_LEIT);
+      corpo += `<div class="pergunta"><b>${qi+1}) ${q.q}</b><div class="opcoes">`;
+      ops.forEach((o,pi)=>{
+        let cls = 'op';
+        if(r){ if(o.ok) cls+=' certa'; else if(o.k===r.esc) cls+=' errada'; else cls+=' cinza'; }
+        corpo += `<button class="${cls}" ${r?'disabled':''} data-q="${qid}" data-k="${o.k}">${LETRAS[pi]}) ${o.t}</button>`;
+      });
+      corpo += `</div>`;
+      if(r){ const e2 = q.o[r.esc]; const certa = q.o.find(o=>o.ok);
+        corpo += r.ok ? `<div class="fb ok">🎉 ${e2.w}${somBt(q.fala)}</div>` : `<div class="fb no">💭 Quase! ${e2.w}<br>✔️ <b>Resposta certa:</b> ${certa.t} — ${certa.w}${somBt(q.fala)}</div>`; }
+      corpo += `</div>`;
+    });
+    corpo += `</div>`;
+    d.innerHTML = cab + corpo; box.appendChild(d);
+    d.querySelector('.cab').onclick = ()=>{ fechados[b.id] = !fechados[b.id]; d.classList.toggle('fechado'); };
+    anteriorFeito = completo;
+  });
+  box.querySelectorAll('button.op').forEach(bt=>bt.onclick = ()=>responderLeitura(bt.dataset.q, +bt.dataset.k));
+  const resp = Object.keys(S.leitura.resp).length; const acertos = Object.values(S.leitura.resp).filter(r=>r.ok).length;
+  $('barraLeitura').style.width = (resp/TOTAL_PERG*100)+'%';
+  $('txtLeitura').innerHTML = `${resp} de ${TOTAL_PERG} perguntas respondidas · ⭐ ${acertos} acertos · ${blocosFeitos()} de ${BLOCOS.length} pipas no céu 🪁`;
+  renderCeu();
+  $('fimLeitura').style.display = S.leitura.concluido ? 'block' : 'none';
+}
+function responderLeitura(qid, k){
+  if(S.leitura.resp[qid]) return;
+  const [bid, qi] = qid.split('_'); const b = BLOCOS.find(x=>x.id===bid); const q = b.qs[+qi];
+  S.leitura.resp[qid] = {esc:k, ok:!!q.o[k].ok, em:new Date().toISOString()};
+  const fimAgora = !S.leitura.concluido && Object.keys(S.leitura.resp).length===TOTAL_PERG;
+  if(fimAgora) concluir('leitura');
+  salvar('leitura'); renderLeitura();
+  if(fimAgora) abrirModal('<div class="trofeu">🏆</div><h2>Leitura concluída!</h2><p>Todas as pipas estão no céu! 🪁 O <b>Mapa Mental</b> foi destravado! ✨</p>', [{t:'🧠 Ir para o Mapa Mental', cls:'btn', fn:()=>ir('mapa')},{t:'Ficar aqui', cls:'btn claro'}]);
+}
+
+function renderCeu(){
+  const v = $('ceu'); if(!v) return;
+  v.innerHTML = BLOCOS.map((b,j)=>`<div class="pipa ${blocoFeito(b)?'voando':''}" style="--c:${b.cor}" title="${j+1}. ${b.titulo}"><div class="losango">${b.emoji}</div><div class="rabo"></div><small>${j+1}</small></div>`).join('');
+}
+
+// ---------- MAPA MENTAL ----------
+function renderMapa(){
+  const box = $('ramosMapa'); box.innerHTML = '';
+  RAMOS.forEach(r=>{
+    const d = document.createElement('div'); d.className='ramo'; d.style.setProperty('--c', r.cor);
+    let h = `<h4>${r.nome}</h4>`;
+    r.nos.forEach(n=>{
+      if(typeof n==='string'){ h += `<div class="no">• ${n}</div>`; return; }
+      h += '<div class="no">• ' + n.map(p=>{
+        if(typeof p==='string') return p;
+        const st = S.mapa.pecas[p.id];
+        if(st && st.feita) return `<span class="lacuna feita"><span class="enc">${p.certa}</span></span>`;
+        const ops = embaralhar([p.certa, p.errada], hashStr(p.id)+SEED_MAPA);
+        return `<span class="lacuna">` + ops.map(o=>`<button data-p="${p.id}" data-v="${esc(o)}">${o}</button>`).join('<span style="align-self:center">ou</span>') + `</span>`;
+      }).join('') + '</div>';
+    });
+    d.innerHTML = h; box.appendChild(d);
+  });
+  box.querySelectorAll('.lacuna button').forEach(bt=>bt.onclick = ()=>encaixar(bt));
+  const f = pecasFeitas();
+  $('contadorMapa').textContent = f===TOTAL_PECAS ? '🧠 Mapa completo!' : `🧩 Mapa: ${f} de ${TOTAL_PECAS} peças encaixadas`;
+  $('mapa').classList.toggle('incompleto', f<TOTAL_PECAS);
+  $('mapa').classList.toggle('completo', f===TOTAL_PECAS);
+  $('mapaFim').style.display = f===TOTAL_PECAS ? 'block' : 'none';
+}
+function encaixar(bt){
+  const p = PECAS.find(x=>x.id===bt.dataset.p); const st = S.mapa.pecas[p.id] || {feita:false, tentou:false};
+  if(bt.dataset.v===p.certa){
+    st.feita = true; st.deprimeira = !st.tentou; st.em = new Date().toISOString(); S.mapa.pecas[p.id] = st;
+    const fimAgora = !S.mapa.concluido && pecasFeitas()===TOTAL_PECAS;
+    if(fimAgora) concluir('mapa');
+    salvar('mapa'); renderMapa();
+    if(fimAgora) abrirModal('<div class="trofeu">🧠</div><h2>Mapa completo!</h2><p>Você montou o mapa inteiro. O <b>Verdadeiro ou Falso</b> foi destravado! ✨</p>', [{t:'✅ Jogar Verdadeiro ou Falso', cls:'btn', fn:()=>ir('vf')},{t:'Ver o mapa', cls:'btn claro'}]);
+  } else {
+    st.tentou = true; S.mapa.pecas[p.id] = st; salvar('mapa');
+    bt.classList.remove('erro'); void bt.offsetWidth; bt.classList.add('erro');
+  }
+}
+
+// ---------- VERDADEIRO OU FALSO ----------
+let rodada = null;
+function novaRodada(){ const idx = embaralhar(VF.map((_,i)=>i), (Math.random()*1e9)>>>0).slice(0,12); rodada = {itens:idx, i:0, acertos:0, respondida:null}; renderVF(); }
+function estrelas(pct){ const n = Math.round(pct/20); return '⭐'.repeat(n) + '☆'.repeat(5-n); }
+function renderVF(){
+  const box = $('vfJogo');
+  if(!rodada){
+    box.innerHTML = `<h2>✅ Verdadeiro ou Falso</h2><p>Vou mostrar <b>12 frases</b> sorteadas sobre a Unidade 8. Para cada uma, diga se é <b>Verdadeira</b> ou <b>Falsa</b>. Depois de cada resposta aparece a explicação.</p>
+      ${S.vf.melhor!==null?`<p>🏅 Seu melhor placar: <b>${S.vf.melhor}%</b> ${estrelas(S.vf.melhor)} · rodadas jogadas: ${S.vf.rodadas}</p>`:''}
+      <div style="text-align:center"><button class="btn faisca" id="btVfComecar">▶️ Começar rodada</button></div>`;
+    $('btVfComecar').onclick = novaRodada; return;
+  }
+  if(rodada.i >= rodada.itens.length){
+    const pct = Math.round(rodada.acertos/rodada.itens.length*100);
+    box.innerHTML = `<div class="placar-final"><div class="trofeu">🏆</div><h2>Rodada completa!</h2><p>Você acertou <b>${rodada.acertos} de ${rodada.itens.length}</b> — <b>${pct}%</b></p><p class="estrelas">${estrelas(pct)}</p><p>🏅 Melhor placar: ${S.vf.melhor}%</p>
+      <button class="btn fio" id="btVfDeNovo">🔁 Jogar de novo</button> <button class="btn faisca" id="btVfResumo">🗺️ Agora revise no Resumo!</button></div>`;
+    $('btVfDeNovo').onclick = novaRodada; $('btVfResumo').onclick = ()=>ir('resumo'); return;
+  }
+  const it = VF[rodada.itens[rodada.i]];
+  let h = `<div class="sub">Frase ${rodada.i+1} de ${rodada.itens.length} · ✔️ ${rodada.acertos} acertos</div><div class="barra"><div style="width:${rodada.i/rodada.itens.length*100}%"></div></div>
+    <div class="vf-frase">"${it.f}"</div>`;
+  if(rodada.respondida===null){
+    h += `<div class="vf-bts"><button class="btn" id="btV">👍 Verdadeiro</button><button class="btn faisca" id="btF">👎 Falso</button></div>`;
+    box.innerHTML = h; $('btV').onclick = ()=>responderVF(1); $('btF').onclick = ()=>responderVF(0);
+  } else {
+    const acertou = rodada.respondida===it.v;
+    h += `<div class="fb ${acertou?'ok':'no'}">${acertou?'🎉 Acertou!':'💭 Não foi dessa vez.'} ${it.e}</div><div style="text-align:center;margin-top:10px"><button class="btn fio" id="btVfProx">${rodada.i+1<rodada.itens.length?'➡️ Próxima frase':'🏁 Ver resultado'}</button></div>`;
+    box.innerHTML = h; $('btVfProx').onclick = ()=>{ rodada.i++; rodada.respondida=null; if(rodada.i>=rodada.itens.length) fimRodada(); renderVF(); };
+  }
+}
+function responderVF(v){ const it = VF[rodada.itens[rodada.i]]; rodada.respondida = v; if(v===it.v) rodada.acertos++; renderVF(); }
+function fimRodada(){
+  const pct = Math.round(rodada.acertos/rodada.itens.length*100);
+  S.vf.rodadas = (S.vf.rodadas||0)+1; S.vf.melhor = Math.max(S.vf.melhor||0, pct);
+  S.vf.historico = (S.vf.historico||[]).concat([{pct, em:new Date().toISOString()}]).slice(-20);
+  const primeira = !S.vf.concluido; concluir('vf'); salvar('vf');
+  if(primeira) setTimeout(()=>abrirModal('<div class="trofeu">🗺️</div><h2>Resumo destravado!</h2><p>Agora revise tudo no <b>Resumo</b> antes do Simulado.</p>', [{t:'🗺️ Ir para o Resumo', cls:'btn', fn:()=>ir('resumo')},{t:'Ficar aqui', cls:'btn claro'}]), 200);
+}
+
+// ---------- RESUMO ----------
+function renderResumo(){
+  $('gradePaises').innerHTML = PAISES.map(x=>`<div class="pais"><span class="letra">${x.l}.</span>${bd(x.id,'p')}<div>${es(x.p)}<br>🏙️ ${es(x.c)}</div></div>`).join('');
+  $('truques').innerHTML = `
+    <div class="col" style="--c:#ff8a3d"><h4>🏙️ "Ciudad de…" (3)</h4><ul><li>México → ${es('Ciudad de México')}</li><li>Guatemala → ${es('Ciudad de Guatemala')}</li><li>Panamá → ${es('Ciudad de Panamá')}</li></ul></div>
+    <div class="col" style="--c:#8e5bd0"><h4>⛪ San / Santo (5)</h4><ul><li>El Salvador → ${es('San Salvador')}</li><li>Costa Rica → ${es('San José')}</li><li>Puerto Rico → ${es('San Juan')}</li><li>República Dominicana → ${es('Santo Domingo')}</li><li>Chile → ${es('Santiago')}</li></ul></div>
+    <div class="col" style="--c:#24a36b"><h4>🌎 As outras (13)</h4><ul><li>Cuba → La Habana · Honduras → Tegucigalpa · Nicaragua → Managua</li><li>Venezuela → Caracas · Colombia → Bogotá · Ecuador → Quito</li><li>Perú → Lima · Bolivia → Sucre · Paraguay → Asunción</li><li>Argentina → Buenos Aires · Uruguay → Montevideo</li><li>España → Madrid · Guinea Ecuatorial → Malabo <i>(as duas da p. 69)</i></li></ul></div>`;
+  $('bandeirasResumo').innerHTML = `<div class="galeria">
+    <div class="item">${bd('cuba','g')}<br>${es('La bandera cubana tiene tres colores: rojo, azul y blanco. Dentro del triángulo hay una estrella.')}</div>
+    <div class="item">${bd('bolivia','g')}<br>${es('La bandera boliviana tiene tres colores: rojo, amarillo y verde.')}</div>
+    <div class="item">${bd('uruguay','g')}<br>${es('La bandera uruguaya tiene dos colores: azul y blanco. En la parte superior izquierda hay un sol.')}</div>
+    <div class="item">${bd('peru','g')}<br>${es('La bandera peruana es roja y blanca.')}</div>
+    <div class="item">${bd('paraguay','g')}<br><b>Paraguay</b> ${somBt('Paraguay')}<br><span class="sub">Não deixe em branco!</span></div></div>`;
+  $('tabelaResumo').innerHTML = `<table class="quadro"><tr><th></th><th>Singular</th><th>Plural</th></tr>
+    <tr><td colspan="3" style="text-align:center;background:#eef3ff"><b>Terminados en vocal</b></td></tr>
+    <tr><td class="lado">Masculino</td><td>${es('Él es mexicano.')}</td><td>${es('Ellos son mexicanos.')}</td></tr>
+    <tr><td class="lado">Femenino</td><td>${es('Ella es mexicana.')}</td><td>${es('Ellas son mexicanas.')}</td></tr>
+    <tr><td colspan="3" style="text-align:center;background:#eef3ff"><b>Terminados en consonante</b></td></tr>
+    <tr><td class="lado">Masculino</td><td>${es('Él es español.')}</td><td>${es('Ellos son españoles.')}</td></tr>
+    <tr><td class="lado">Femenino</td><td>${es('Ella es española.')}</td><td>${es('Ellas son españolas.')}</td></tr></table>
+    <div class="regra">📌 ${es('La bandera')} é feminina → cubana, boliviana, uruguaya, peruana. ${es('El jugador, el equipo, el escritor, el plato')} são masculinos → cubano, boliviano, uruguayo, peruano.</div>
+    <div class="exemplo">💬 ${es('Es Frida Kahlo, una pintora mexicana.')} · ${es('Yo pensaba que era española.')}<br>🏐 Leal → ${es('un jugador cubano de voleibol')} · ⚽ The Strongest → ${es('un equipo boliviano de fútbol')}<br>📚 Horacio Quiroga → ${es('el escritor uruguayo')} (<i>Cuentos de la selva</i>) · 🍽️ ${es('El ceviche es un plato típico peruano.')}</div>`;
+  const POST = [
+    '✅ <b>Ciudad</b> — C-I-U-D-A-D. Nunca "Cuidad".',
+    '✅ <b>España</b> — com ñ e terminando em a. Nunca "Españo".',
+    '✅ <b>México</b> — M maiúsculo e x. Nunca "méxico" ou "Méxica".',
+    '✅ <b>El Salvador</b> (país) × <b>San Salvador</b> (capital) — sempre com S maiúsculo.',
+    '✅ <b>Bolivia</b> — em espanhol, sem acento.',
+    '✅ <b>Venezuela</b> — com z.',
+    '✅ <b>Guinea Ecuatorial</b> — e-cu-a-to-rial.',
+    '✅ <b>Paraguay</b> — não deixe a bandeira em branco!',
+    '✅ <b>Lima</b>, <b>Quito</b>, <b>La Habana</b> — capriche na primeira letra (maiúscula e bem feita).',
+    '✅ Com acento: <b>Bogotá, San José, Asunción, Perú, Panamá</b>.'
+  ];
+  $('postits').innerHTML = POST.map(t=>`<div class="postit">${t}</div>`).join('');
+  const PAL = [['mapa','mapa'],['pizarra','lousa'],['bandera','bandeira'],['capital','capital'],['ciudad','cidade'],['rojo','vermelho'],['azul','azul'],['blanco','branco'],['amarillo','amarelo'],['verde','verde'],['estrella','estrela'],['sol','sol'],['jugador','jogador'],['equipo','time, equipe'],['escritor','escritor'],['plato típico','prato típico'],['pintora','pintora'],['camiseta','camiseta'],['Él / Ella','ele / ela'],['Ellos / Ellas','eles / elas'],['Nosotras','nós (meninas)'],['masculino / femenino','masculino / feminino'],['singular / plural','singular / plural']];
+  $('gradePalavras').innerHTML = PAL.map(p=>`<div class="palavra">${es(p[0])}<br><span class="sub">= ${p[1]}</span></div>`).join('');
+  $('relampago').innerHTML = RELAMPAGO.map((r,i)=>`<button class="op" data-r="${i}">⚡ ${r[0]}</button><div class="resp-oculta" id="rel${i}">👉 ${r[1]}</div>`).join('');
+  document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{ const el=$('rel'+b.dataset.r); el.style.display = el.style.display==='block'?'none':'block'; });
+  atualizarBotaoResumo();
+}
+function medirRolagem(){
+  if(abaAtual!=='resumo') return;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = h<=0 ? 100 : Math.min(100, Math.round(window.scrollY/h*100));
+  if(pct > (S.resumo.maxRolagem||0)){ S.resumo.maxRolagem = pct; salvar('resumo'); }
+  atualizarBotaoResumo();
+}
+function atualizarBotaoResumo(){
+  const bt = $('btLiResumo'); const pode = S.resumo.concluido || (S.resumo.maxRolagem||0) >= 90;
+  bt.disabled = !pode || S.resumo.concluido;
+  bt.textContent = S.resumo.concluido ? '✅ Resumo lido!' : '✅ Li o resumo até o fim';
+  $('txtLiResumo').textContent = S.resumo.concluido ? 'Concluído em '+dataBR(S.resumo.concluidoEm)+'. O Simulado está aberto!' : (pode ? 'Pode clicar!' : 'O botão acende quando você chegar ao fim da página.');
+}
+function liResumo(){
+  if(S.resumo.concluido) return;
+  concluir('resumo'); salvar('resumo'); atualizarBotaoResumo();
+  abrirModal('<div class="trofeu">📝</div><h2>Simulado destravado!</h2><p>Agora é hora de mostrar o que aprendeu. ¡Buena suerte, jovem aprendiz!</p>', [{t:'📝 Ir para o Simulado', cls:'btn', fn:()=>ir('simulado')},{t:'Revisar mais um pouco', cls:'btn claro'}]);
+}
+
+// ---------- SIMULADO ----------
+function opsSim(qi){ const q = SIM[qi]; const base = q.o.map((o,k)=>({k, t:o[0], ok:o.length===3, w:o.length===3?o[2]:o[1]})); return embaralhar(base, hashStr('sim'+qi)+SEED_SIM); }
+function renderSimulado(){
+  const box = $('questoesSim'); box.innerHTML = '';
+  SIM.forEach((q,qi)=>{
+    const d = document.createElement('div'); d.className = 'card';
+    const r = S.simulado.resp[qi];
+    let h = `<b>Questão ${qi+1}.</b> ${q.q}<div class="opcoes" style="margin-top:8px">`;
+    opsSim(qi).forEach((o,pi)=>{
+      let cls='op'; if(r===o.k) cls+=' sel';
+      if(S.simulado.enviado){ cls='op'+(o.ok?' certa':(r===o.k?' errada':' cinza')); }
+      h += `<button class="${cls}" ${S.simulado.enviado?'disabled':''} data-sq="${qi}" data-k="${o.k}">${LETRAS[pi]}) ${o.t}</button>`;
+    });
+    d.innerHTML = h + '</div>'; box.appendChild(d);
+  });
+  if(!S.simulado.enviado) box.querySelectorAll('[data-sq]').forEach(b=>b.onclick=()=>{ S.simulado.resp[b.dataset.sq] = +b.dataset.k; salvar('simulado'); renderSimulado(); });
+  const n = Object.keys(S.simulado.resp).length;
+  $('barraSim').style.width = (n/SIM.length*100)+'%';
+  $('txtSim').textContent = S.simulado.enviado ? `Enviado em ${dataBR(S.simulado.enviadoEm)}` : `${n} de ${SIM.length} respondidas`;
+  $('envioSim').style.display = S.simulado.enviado ? 'none' : 'block';
+  renderResultado();
+}
+function gerarCodigo(ac){ const L='ABCDEFGHJKLMNPQRSTUVWXYZ'; const r=()=>L[Math.floor(Math.random()*L.length)]; return `SIM-${String(ac).padStart(2,'0')}-${r()}${r()}`; }
+function enviarSim(){
+  const falta = SIM.map((_,i)=>i).filter(i=>S.simulado.resp[i]===undefined);
+  if(falta.length){ abrirModal(`<div class="trofeu">✏️</div><h2>Ainda faltam ${falta.length} questões</h2><p>Responda as questões: <b>${falta.map(i=>i+1).join(', ')}</b>.</p>`); return; }
+  abrirModal('<h2>Enviar o Simulado?</h2><p>Depois de enviar, não dá para mudar as respostas.</p>', [{t:'📨 Enviar', cls:'btn faisca', fn:confirmarEnvio},{t:'Revisar antes', cls:'btn claro'}]);
+}
+function confirmarEnvio(){
+  let ac = 0; SIM.forEach((q,qi)=>{ if(q.o[S.simulado.resp[qi]].length===3) ac++; });
+  S.simulado.acertos = ac; S.simulado.enviado = true; S.simulado.enviadoEm = new Date().toISOString();
+  if(!S.simulado.codigo) S.simulado.codigo = gerarCodigo(ac);
+  concluir('simulado'); salvar('simulado'); renderSimulado();
+  setTimeout(()=>{ const el=$('resultadoSim'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 100);
+}
+function renderResultado(){
+  const box = $('resultadoSim');
+  if(!S.simulado.enviado){ box.innerHTML=''; return; }
+  const ac = S.simulado.acertos; const pct = Math.round(ac/SIM.length*100);
+  let h = `<div class="card placar-final"><div class="trofeu">${pct>=70?'🏆':'💪'}</div><h2>Você acertou ${ac} de ${SIM.length} (${pct}%)</h2><p class="estrelas">${estrelas(pct)}</p>
+    <p>${pct>=70?'¡Muy bien! Mandou muito bem!':'Continue treinando: releia o Resumo e confira o gabarito abaixo.'}</p>
+    <p>Seu código para os pais: <b style="font-size:1.3em;color:var(--pipa2)">${S.simulado.codigo}</b></p></div>
+    <div class="card"><h2>📗 Gabarito comentado</h2><p class="sub">A certa aparece em verde. As outras aparecem em cinza, com a explicação do erro. A sua resposta tem contorno azul. Toque no 🔊 para ouvir em espanhol. O gabarito também está no <a href="gabarito_simulado.html" target="_blank">arquivo separado</a>.</p>`;
+  SIM.forEach((q,qi)=>{
+    const r = S.simulado.resp[qi]; const ops = opsSim(qi); const acertou = q.o[r].length===3;
+    h += `<div class="gab-q"><b>${acertou?'✅':'❌'} Questão ${qi+1}.</b> ${q.q}${somBt(q.fala)}`;
+    ops.forEach((o,pi)=>{ h += `<div class="gab-op ${o.ok?'certa':'cinza'} ${r===o.k?'marcada':''}">${o.ok?'✔️':'✖️'} <b>${LETRAS[pi]}) ${o.t}</b>${r===o.k?' <i>(sua resposta)</i>':''}<br><span>${o.w}</span></div>`; });
+    h += `</div>`;
+  });
+  box.innerHTML = h + '</div>';
+}
+
+// ---------- PAINEL / RELATÓRIO / EXPORTAR ----------
+function atualizarPainel(){
+  const datas = ['leitura','mapa','vf','resumo','simulado'].map(n=>S[n]&&S[n].salvoEm).filter(Boolean).sort();
+  const el = $('painelSalvar'); if(el) el.textContent = datas.length ? `Progresso salvo neste aparelho. Último salvamento: ${dataBR(datas[datas.length-1])}` : 'Seu progresso é salvo sozinho neste aparelho.';
+}
+function abrirRelatorio(){
+  const cod = $('codPais').value.trim().toUpperCase(); const area = $('areaPais');
+  const ehPais = cod===CODIGO_PAIS; const ehSim = S.simulado.codigo && cod===S.simulado.codigo;
+  if(!ehPais && !ehSim){ area.innerHTML = '<p class="fb no">Código não reconhecido. Use o código do Simulado (SIM-…) ou o código da família.</p>'; return; }
+  const resp = Object.values(S.leitura.resp); const lAc = resp.filter(r=>r.ok).length;
+  const errLeit = []; BLOCOS.forEach(b=>b.qs.forEach((q,qi)=>{ const r=S.leitura.resp[b.id+'_'+qi]; if(r && !r.ok) errLeit.push(b.titulo+' – '+q.q.replace(/<[^>]+>/g,'')); }));
+  const pecasPrim = PECAS.filter(p=>S.mapa.pecas[p.id] && S.mapa.pecas[p.id].feita && S.mapa.pecas[p.id].deprimeira).length;
+  const errSim = S.simulado.enviado ? SIM.map((q,qi)=>q.o[S.simulado.resp[qi]].length===3?null:qi+1).filter(Boolean) : [];
+  let h = `<table class="rel"><tr><th>Material</th><th>Resultado</th></tr>
+   <tr><td>📖 Leitura Guiada</td><td>${resp.length} de ${TOTAL_PERG} respondidas · ${lAc} acertos de primeira${errLeit.length?'<br><span class="sub">Errou: '+errLeit.join('; ')+'</span>':''}</td></tr>
+   <tr><td>🧠 Mapa Mental</td><td>${pecasFeitas()} de ${TOTAL_PECAS} peças encaixadas · <b>Mapa Mental: ${pecasPrim} de ${TOTAL_PECAS} peças encaixadas de primeira</b></td></tr>
+   <tr><td>✅ Verdadeiro ou Falso</td><td>${S.vf.melhor!==null?'Melhor placar: '+S.vf.melhor+'% · rodadas: '+S.vf.rodadas:'Ainda não jogou'}</td></tr>
+   <tr><td>🗺️ Resumo</td><td>Rolagem máxima: ${S.resumo.maxRolagem||0}% · ${S.resumo.concluido?'marcou "li até o fim"':'não marcou "li até o fim"'}</td></tr>
+   <tr><td>📝 Simulado</td><td>${S.simulado.enviado?`${S.simulado.acertos} de ${SIM.length} (${Math.round(S.simulado.acertos/SIM.length*100)}%) · código ${S.simulado.codigo}${errSim.length?'<br><span class="sub">Errou as questões: '+errSim.join(', ')+'</span>':''}`:'Ainda não enviado'}</td></tr>
+   <tr><td>🛤️ Trilha</td><td>${ETAPAS.map(e=>`${e.ic} ${e.nome}: ${feito(e.id)?'✅ concluída em '+dataBR(S[e.id].concluidoEm):'⏳ não concluída'}`).join('<br>')}
+     <br>${S.trilha.liberadoPelosPais?'🔓 Trilha liberada pelos pais em '+dataBR(S.trilha.liberadoEm):'🔒 Trilha não liberada pelos pais'}
+     ${S.trilha.historico.length?'<br><span class="sub">Histórico: '+S.trilha.historico.map(x=>x.acao+' em '+dataBR(x.em)).join('; ')+'</span>':''}</td></tr></table>`;
+  if(ehPais){
+    h += S.trilha.liberadoPelosPais
+      ? `<p class="caixa">🔓 <b>Trilha liberada pelos pais</b></p><button class="btn claro" id="btTrancar">🔒 Trancar de novo</button>`
+      : `<button class="btn fio" id="btLiberar">🔓 Liberar todos os materiais</button>`;
+  }
+  area.innerHTML = h;
+  if($('btLiberar')) $('btLiberar').onclick = ()=>{ S.trilha.liberadoPelosPais=true; S.trilha.liberadoEm=new Date().toISOString(); S.trilha.historico.push({acao:'liberou', em:S.trilha.liberadoEm}); gravar(K.trilha,S.trilha); renderTrilha(); abrirRelatorio(); };
+  if($('btTrancar')) $('btTrancar').onclick = ()=>{ S.trilha.liberadoPelosPais=false; S.trilha.historico.push({acao:'trancou de novo', em:new Date().toISOString()}); gravar(K.trilha,S.trilha); renderTrilha(); abrirRelatorio(); };
+}
+function exportar(){
+  const dados = {kit:SLUG, titulo:'Céu de Pipas — Espanhol 5º ano', exportadoEm:new Date().toISOString(), leitura:S.leitura, mapa:S.mapa, vf:S.vf, resumo:S.resumo, simulado:S.simulado, trilha:S.trilha};
+  const blob = new Blob([JSON.stringify(dados,null,2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'progresso_ceu_de_pipas.json'; document.body.appendChild(a); a.click(); a.remove();
+}
+function importar(arq){
+  const fr = new FileReader();
+  fr.onload = ()=>{ try{ const d = JSON.parse(fr.result); if(d.kit!==SLUG) throw 0;
+      ['leitura','mapa','vf','resumo','simulado','trilha'].forEach(n=>{ if(d[n]) gravar(K[n], d[n]); });
+      carregar(); renderTudo(); abrirModal('<h2>📤 Progresso importado!</h2>');
+    }catch(e){ abrirModal('<h2>Arquivo não reconhecido</h2><p>Escolha o arquivo exportado deste kit.</p>'); } };
+  fr.readAsText(arq);
+}
+function zerarTudo(){
+  abrirModal('<h2>🗑️ Zerar tudo?</h2><p>Todo o progresso deste kit será apagado neste aparelho.</p>', [{t:'Sim, zerar', cls:'btn faisca', fn:()=>{ Object.values(K).forEach(apagar); carregar(); rodada=null; renderTudo(); ir('inicio'); }},{t:'Cancelar', cls:'btn claro'}]);
+}
+
+function renderTudo(){ renderLeitura(); renderMapa(); renderVF(); renderResumo(); renderSimulado(); atualizarPainel(); renderTrilha(); }
+function iniciar(){
+  carregar(); renderTudo();
+  $('btExportar').onclick = exportar; $('btImportar').onclick = ()=>$('arqImportar').click();
+  $('arqImportar').onchange = e=>{ if(e.target.files[0]) importar(e.target.files[0]); e.target.value=''; };
+  $('btZerar').onclick = zerarTudo; $('btRelatorio').onclick = abrirRelatorio;
+  $('codPais').addEventListener('keydown', e=>{ if(e.key==='Enter') abrirRelatorio(); });
+  $('btLiResumo').onclick = liResumo; $('btEnviarSim').onclick = enviarSim;
+  window.addEventListener('scroll', ()=>{ if(abaAtual==='resumo') medirRolagem(); }, {passive:true});
+  window.addEventListener('hashchange', ()=>{ const h = location.hash.replace('#',''); if(h) ir(h); });
+  const h0 = location.hash.replace('#',''); ir(h0 || 'inicio');
+}
+iniciar();
+</script>
+</body>
+</html>
